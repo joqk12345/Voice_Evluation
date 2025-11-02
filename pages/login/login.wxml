@@ -1,0 +1,69 @@
+<!--pages/login/login.wxml-->
+<view class="login-container">
+  <!-- 背景装饰 -->
+  <view class="bg-decoration">
+    <view class="bg-circle bg-circle-1"></view>
+    <view class="bg-circle bg-circle-2"></view>
+    <view class="bg-circle bg-circle-3"></view>
+  </view>
+
+  <!-- 主要内容 -->
+  <view class="login-content">
+    <!-- Logo和标题 -->
+    <view class="logo-section">
+      <view class="logo">🎤</view>
+      <text class="app-title">声乐评测</text>
+      <text class="app-subtitle">发现你的声音之美</text>
+    </view>
+
+    <!-- 功能介绍 -->
+    <view class="features">
+      <view class="feature-item">
+        <view class="feature-icon">🎵</view>
+        <text class="feature-text">专业音准分析</text>
+      </view>
+      <view class="feature-item">
+        <view class="feature-icon">🎼</view>
+        <text class="feature-text">节奏感评测</text>
+      </view>
+      <view class="feature-item">
+        <view class="feature-icon">🎯</view>
+        <text class="feature-text">个性化建议</text>
+      </view>
+    </view>
+
+    <!-- 登录按钮 -->
+    <view class="login-section">
+      <button 
+        class="login-btn" 
+        open-type="getUserProfile" 
+        bindgetuserprofile="getUserProfile"
+        wx:if="{{!hasLogin}}"
+      >
+        <view class="btn-content">
+          <view class="btn-icon">🔐</view>
+          <text>微信一键登录</text>
+        </view>
+      </button>
+
+      <view class="user-info" wx:if="{{hasLogin}}">
+        <view class="user-avatar" wx:if="{{!userInfo.avatarUrl}}">
+          <text class="avatar-emoji">👤</text>
+        </view>
+        <image class="user-avatar" wx:else src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+        <text class="user-name">{{userInfo.nickName}}</text>
+        <button class="btn btn-outline" bindtap="completeProfile">完善资料</button>
+      </view>
+    </view>
+
+    <!-- 隐私协议 -->
+    <view class="privacy-section">
+      <text class="privacy-text">
+        登录即表示同意
+        <text class="privacy-link" bindtap="showPrivacy">《隐私政策》</text>
+        和
+        <text class="privacy-link" bindtap="showTerms">《用户协议》</text>
+      </text>
+    </view>
+  </view>
+</view>

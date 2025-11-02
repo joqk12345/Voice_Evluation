@@ -1,0 +1,201 @@
+<!--pages/index/index.wxml-->
+<view class="container">
+  <!-- 欢迎横幅 -->
+  <view class="welcome-banner">
+    <view class="banner-content">
+      <text class="banner-title">🎤 声乐评测</text>
+      <text class="banner-subtitle">发现你的声音之美</text>
+    </view>
+  </view>
+
+  <!-- 主要功能区域 -->
+  <view class="main-actions">
+    <!-- 每日挑战快速入口 -->
+    <view class="challenge-quick-entry" bindtap="viewChallenge">
+      <view class="challenge-header">
+        <view class="challenge-icon">🎯</view>
+        <view class="challenge-info">
+          <text class="challenge-title">每日挑战</text>
+          <text class="challenge-desc">完成今日挑战，获得积分奖励</text>
+        </view>
+        <view class="challenge-progress">
+          <text class="progress-text">{{challengeProgress}}/5</text>
+          <view class="progress-bar">
+            <view class="progress-fill" style="width: {{challengeProgressPercent}}%;"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 开始评测 -->
+    <view class="action-card primary" bindtap="startEvaluation">
+      <view class="action-icon">🎵</view>
+      <view class="action-content">
+        <text class="action-title">开始声乐评测</text>
+        <text class="action-desc">专业分析你的音准、节奏、音色</text>
+      </view>
+      <view class="action-arrow">→</view>
+    </view>
+
+    <!-- 评测选项 -->
+    <view class="evaluation-options">
+      <view class="option-group">
+        <text class="group-title">免费评测</text>
+        <view class="quick-options">
+          <view class="quick-option" bindtap="startQuickTest" data-type="30">
+            <view class="quick-icon">⚡</view>
+            <text class="quick-text">30秒快速评测</text>
+            <text class="quick-desc">基础分析</text>
+          </view>
+          <view class="quick-option" bindtap="startQuickTest" data-type="60">
+            <view class="quick-icon">🎯</view>
+            <text class="quick-text">1分钟详细评测</text>
+            <text class="quick-desc">全面分析</text>
+          </view>
+        </view>
+      </view>
+      
+      <view class="option-group">
+        <text class="group-title">专业评测</text>
+        <view class="pro-option" bindtap="startProEvaluation">
+          <view class="pro-content">
+            <view class="pro-icon">💎</view>
+            <view class="pro-info">
+              <text class="pro-title">专业深度评测</text>
+              <text class="pro-desc">AI+专家双重分析，详细报告</text>
+              <view class="pro-features">
+                <text class="feature-tag">音域分析</text>
+                <text class="feature-tag">技巧指导</text>
+                <text class="feature-tag">改进方案</text>
+              </view>
+            </view>
+            <view class="pro-price">
+              <text class="price-symbol">¥</text>
+              <text class="price-value">29</text>
+              <text class="price-desc">原价¥59</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 一对一声乐课推广 -->
+  <view class="tutor-promotion">
+    <view class="promotion-header">
+      <text class="promotion-title">🎓 专业声乐指导</text>
+      <text class="promotion-subtitle">一对一在线声乐课</text>
+    </view>
+    <view class="promotion-content">
+      <view class="promotion-features">
+        <view class="feature-item">
+          <text class="feature-icon">👨‍🏫</text>
+          <text class="feature-text">专业老师</text>
+        </view>
+        <view class="feature-item">
+          <text class="feature-icon">💻</text>
+          <text class="feature-text">在线授课</text>
+        </view>
+        <view class="feature-item">
+          <text class="feature-icon">🎯</text>
+          <text class="feature-text">个性化指导</text>
+        </view>
+      </view>
+      <view class="promotion-cta">
+        <button class="tutor-btn" bindtap="bookTutorClass">
+          <text class="btn-text">立即预约试听</text>
+          <text class="btn-price">免费试听</text>
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能导航 -->
+  <view class="feature-nav">
+    <view class="nav-item" bindtap="viewChallenge">
+      <view class="nav-icon">🎯</view>
+      <text class="nav-text">每日挑战</text>
+    </view>
+    <view class="nav-item" bindtap="viewAchievements">
+      <view class="nav-icon">🏆</view>
+      <text class="nav-text">成就徽章</text>
+    </view>
+    <view class="nav-item" bindtap="viewHistory">
+      <view class="nav-icon">📊</view>
+      <text class="nav-text">评测历史</text>
+    </view>
+    <view class="nav-item" bindtap="viewRecommend">
+      <view class="nav-icon">🎼</view>
+      <text class="nav-text">练习推荐</text>
+    </view>
+    <view class="nav-item" bindtap="viewSettings">
+      <view class="nav-icon">⚙️</view>
+      <text class="nav-text">设置</text>
+    </view>
+    <view class="nav-item" bindtap="viewProfile">
+      <view class="nav-icon">👤</view>
+      <text class="nav-text">个人中心</text>
+    </view>
+  </view>
+
+  <!-- 最近评测结果（简化版） -->
+  <view class="recent-summary" wx:if="{{recentResult}}">
+    <view class="summary-header">
+      <text class="summary-title">最近评测</text>
+      <text class="summary-more" bindtap="viewHistory">查看全部</text>
+    </view>
+    <view class="summary-content">
+      <view class="score-badge">
+        <text class="score-number">{{recentResult.score}}</text>
+        <text class="score-label">分</text>
+      </view>
+      <view class="summary-info">
+        <text class="summary-date">{{recentResult.date}}</text>
+        <text class="summary-song">{{recentResult.song}}</text>
+      </view>
+        <view class="summary-actions">
+          <view class="action-control" bindtap="shareRecentResult">
+            <view class="control-dots">⋯</view>
+            <view class="control-record">●</view>
+          </view>
+        </view>
+    </view>
+  </view>
+
+  <!-- 成就徽章展示 -->
+  <view class="achievements-showcase">
+    <view class="showcase-header">
+      <text class="showcase-title">我的成就</text>
+      <text class="showcase-more" bindtap="viewAchievements">查看全部</text>
+    </view>
+    <view class="showcase-content">
+      <view class="achievement-stats">
+        <view class="stat-item">
+          <text class="stat-number">{{achievementStats.unlockedCount}}</text>
+          <text class="stat-label">已解锁</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-number">{{achievementStats.totalCount}}</text>
+          <text class="stat-label">总徽章</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-number">{{achievementStats.completionRate}}%</text>
+          <text class="stat-label">完成度</text>
+        </view>
+      </view>
+      <view class="recent-badges">
+        <view class="badge-item" wx:for="{{recentBadges}}" wx:key="id">
+          <view class="badge-icon {{item.unlocked ? 'unlocked' : 'locked'}}">
+            <text class="badge-emoji">{{item.emoji}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 每日提示 -->
+  <view class="daily-tip">
+    <view class="tip-icon">💡</view>
+    <text class="tip-text">每日坚持练习，让声音更加动听</text>
+  </view>
+</view>

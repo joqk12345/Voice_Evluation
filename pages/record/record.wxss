@@ -1,0 +1,716 @@
+/* pages/record/record.wxss - 专业音频分析风格 */
+
+.record-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+  padding: 24rpx;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 背景装饰元素 */
+.record-container::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(30, 58, 138, 0.03) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.record-container::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -30%;
+  width: 150%;
+  height: 150%;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.05) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 音频波形装饰 */
+.audio-wave-decoration {
+  position: absolute;
+  top: 20%;
+  right: 5%;
+  width: 100rpx;
+  height: 200rpx;
+  opacity: 0.1;
+  z-index: 0;
+}
+
+.wave-line {
+  position: absolute;
+  width: 4rpx;
+  background: var(--primary-color);
+  border-radius: 2rpx;
+  animation: waveAnimation 2s ease-in-out infinite;
+}
+
+.wave-line:nth-child(1) { height: 20rpx; top: 0; left: 0; animation-delay: 0s; }
+.wave-line:nth-child(2) { height: 40rpx; top: 10rpx; left: 12rpx; animation-delay: 0.2s; }
+.wave-line:nth-child(3) { height: 60rpx; top: 5rpx; left: 24rpx; animation-delay: 0.4s; }
+.wave-line:nth-child(4) { height: 30rpx; top: 15rpx; left: 36rpx; animation-delay: 0.6s; }
+.wave-line:nth-child(5) { height: 50rpx; top: 8rpx; left: 48rpx; animation-delay: 0.8s; }
+.wave-line:nth-child(6) { height: 25rpx; top: 12rpx; left: 60rpx; animation-delay: 1s; }
+.wave-line:nth-child(7) { height: 45rpx; top: 6rpx; left: 72rpx; animation-delay: 1.2s; }
+.wave-line:nth-child(8) { height: 35rpx; top: 10rpx; left: 84rpx; animation-delay: 1.4s; }
+
+@keyframes waveAnimation {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.5); }
+}
+
+/* 确保内容在装饰元素之上 */
+.page-header,
+.record-status,
+.record-main,
+.action-section {
+  position: relative;
+  z-index: 1;
+}
+
+/* 页面标题 */
+.page-header {
+  text-align: center;
+  margin-bottom: 32rpx;
+  padding: 24rpx 0;
+}
+
+.page-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8rpx;
+  letter-spacing: -0.25rpx;
+}
+
+.page-subtitle {
+  display: block;
+  font-size: 22rpx;
+  color: var(--text-tertiary);
+  font-weight: 400;
+}
+
+/* 专业状态指示器 */
+.record-status {
+  margin-bottom: 32rpx;
+  width: 100%;
+  max-width: 600rpx;
+  align-self: center;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20rpx 32rpx;
+  background: var(--bg-primary);
+  border-radius: var(--border-radius-lg);
+  border: 1rpx solid var(--border-color);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10rpx);
+  transition: all 0.3s ease;
+}
+
+.status-indicator.recording {
+  background: var(--error);
+  color: white;
+  border-color: var(--error);
+  animation: pulse 2s infinite;
+}
+
+.status-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: var(--accent-color);
+  margin-right: 16rpx;
+}
+
+.status-indicator.recording .status-dot {
+  background: white;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0.3; }
+}
+
+.status-text {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.status-indicator.recording .status-text {
+  color: white;
+}
+
+/* 专业录音主区域 */
+.record-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 600rpx;
+  margin-bottom: 32rpx;
+  align-self: center;
+}
+
+/* 录音控制卡片 */
+.record-control-card {
+  background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(248, 250, 252, 0.8) 100%);
+  border-radius: var(--border-radius-lg);
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  border: 1rpx solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(10rpx);
+  position: relative;
+  overflow: hidden;
+}
+
+.record-control-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3rpx;
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--primary-color));
+  opacity: 0.8;
+}
+
+.control-header {
+  display: flex;
+  align-items: center;
+  gap: 32rpx;
+}
+
+.record-button {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-lg), 0 0 20rpx rgba(30, 58, 138, 0.3);
+  transition: all 0.3s ease;
+  border: 3rpx solid var(--primary-light);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.record-button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  animation: buttonShine 3s ease-in-out infinite;
+}
+
+@keyframes buttonShine {
+  0%, 100% { transform: rotate(0deg) scale(1); opacity: 0.3; }
+  50% { transform: rotate(180deg) scale(1.1); opacity: 0.1; }
+}
+
+.record-button:active {
+  transform: scale(0.95);
+  box-shadow: var(--shadow-md);
+}
+
+.record-button.recording {
+  background: var(--error);
+  border-color: #ff6666;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.record-icon {
+  font-size: 56rpx;
+  color: white;
+  position: relative;
+  z-index: 1;
+}
+
+.record-button.recording .record-icon {
+  animation: blink 1s infinite;
+}
+
+.record-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.section-label {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8rpx;
+}
+
+.info-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info-label {
+  font-size: 22rpx;
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+
+.info-value {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+}
+
+/* 录音提示卡片 */
+.instruction-card {
+  background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(248, 250, 252, 0.9) 100%);
+  border-radius: var(--border-radius-lg);
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+  border: 1rpx solid var(--border-color);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(10rpx);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.instruction-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2rpx;
+  background: linear-gradient(90deg, var(--accent-color), var(--primary-color), var(--accent-color));
+  opacity: 0.6;
+}
+
+.instruction-icon {
+  font-size: 28rpx;
+  color: var(--accent-color);
+  flex-shrink: 0;
+}
+
+.instruction-text {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  flex: 1;
+}
+
+/* 评测设置卡片 */
+.settings-card {
+  background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(248, 250, 252, 0.9) 100%);
+  border-radius: var(--border-radius-lg);
+  border: 1rpx solid var(--border-color);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(10rpx);
+  position: relative;
+  overflow: hidden;
+}
+
+.settings-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2rpx;
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--primary-color));
+  opacity: 0.6;
+}
+
+.settings-header {
+  padding: 24rpx 24rpx 16rpx;
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.settings-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.settings-content {
+  padding: 16rpx 24rpx 24rpx;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 0;
+}
+
+.setting-label {
+  flex: 1;
+}
+
+.label-text {
+  display: block;
+  font-size: 24rpx;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 4rpx;
+}
+
+.label-desc {
+  display: block;
+  font-size: 20rpx;
+  color: var(--text-tertiary);
+}
+
+.setting-value {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 12rpx 16rpx;
+  background: var(--neutral-50);
+  border-radius: var(--border-radius);
+  border: 1rpx solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.setting-value:active {
+  background: var(--neutral-100);
+  transform: scale(0.98);
+}
+
+.value-text {
+  font-size: 22rpx;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.arrow-icon {
+  font-size: 18rpx;
+  color: var(--text-quaternary);
+  font-weight: bold;
+}
+
+.setting-divider {
+  height: 1rpx;
+  background: var(--border-color);
+  margin: 8rpx 0;
+}
+
+/* 底部操作区域 */
+.action-section {
+  width: 100%;
+  max-width: 600rpx;
+  align-self: center;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 32rpx;
+}
+
+.action-buttons .btn {
+  flex: 1;
+  height: 88rpx;
+  border-radius: var(--border-radius-md);
+  font-size: 24rpx;
+  font-weight: 500;
+  border: none;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.action-buttons .btn-outline {
+  background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(248, 250, 252, 0.9) 100%);
+  color: var(--primary-color);
+  border: 2rpx solid var(--primary-color);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(10rpx);
+}
+
+.action-buttons .btn-outline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(30, 58, 138, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.action-buttons .btn-outline:active {
+  background: var(--primary-color);
+  color: white;
+  transform: scale(0.98);
+}
+
+.action-buttons .btn-outline:active::before {
+  left: 100%;
+}
+
+.action-buttons .btn-primary {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+  color: white;
+  box-shadow: var(--shadow-md), 0 0 15rpx rgba(30, 58, 138, 0.3);
+}
+
+.action-buttons .btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.action-buttons .btn-primary:active {
+  background: var(--primary-dark);
+  transform: scale(0.98);
+}
+
+.action-buttons .btn-primary:active::before {
+  left: 100%;
+}
+
+.action-buttons .btn-secondary {
+  background: var(--accent-color);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.action-buttons .btn-secondary:active {
+  background: var(--accent-dark);
+  transform: scale(0.98);
+}
+
+.btn-icon {
+  font-size: 26rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.btn-text {
+  font-size: 24rpx;
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
+}
+
+.recorded-actions {
+  display: flex;
+  gap: 16rpx;
+  width: 100%;
+}
+
+.recorded-actions .btn {
+  flex: 1;
+}
+
+/* 录音完成后的操作 */
+.completed-actions {
+  width: 100%;
+  max-width: 600rpx;
+  align-self: center;
+}
+
+.completion-card {
+  background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(248, 250, 252, 0.9) 100%);
+  border-radius: var(--border-radius-lg);
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  border: 1rpx solid var(--border-color);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(10rpx);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.completion-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2rpx;
+  background: linear-gradient(90deg, var(--accent-color), var(--primary-color), var(--accent-color));
+  opacity: 0.6;
+}
+
+.completion-icon {
+  font-size: 44rpx;
+  margin-bottom: 16rpx;
+}
+
+.completion-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.completion-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.completion-desc {
+  font-size: 22rpx;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.btn-large {
+  height: 96rpx;
+  font-size: 26rpx;
+}
+
+/* 专业加载状态 */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(10rpx);
+}
+
+.loading-content {
+  background: var(--bg-primary);
+  border-radius: var(--border-radius-lg);
+  padding: 48rpx;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  border: 1rpx solid var(--border-color);
+  max-width: 400rpx;
+  margin: 0 32rpx;
+}
+
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 4rpx solid var(--neutral-200);
+  border-top: 4rpx solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 24rpx;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  font-size: 24rpx;
+  color: var(--text-primary);
+  font-weight: 500;
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+.loading-desc {
+  font-size: 20rpx;
+  color: var(--text-tertiary);
+  line-height: 1.5;
+}
+
+/* 响应式设计 */
+@media (max-width: 750rpx) {
+  .record-container {
+    padding: 16rpx;
+  }
+  
+  .record-button {
+    width: 120rpx;
+    height: 120rpx;
+  }
+  
+  .record-icon {
+    font-size: 48rpx;
+  }
+  
+  .control-header {
+    gap: 24rpx;
+  }
+  
+  .section-label {
+    font-size: 22rpx;
+  }
+  
+  .info-section {
+    gap: 10rpx;
+  }
+  
+  .info-details {
+    gap: 6rpx;
+  }
+  
+  .action-buttons .btn {
+    height: 80rpx;
+    font-size: 22rpx;
+  }
+  
+  .page-title {
+    font-size: 28rpx;
+  }
+  
+  .page-subtitle {
+    font-size: 20rpx;
+  }
+}

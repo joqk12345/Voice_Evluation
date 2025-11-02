@@ -1,0 +1,33 @@
+{
+  "name": "voice-evaluation-miniprogram",
+  "version": "1.0.0",
+  "description": "声乐评测微信小程序",
+  "main": "app.js",
+  "scripts": {
+    "dev": "微信开发者工具",
+    "build": "微信开发者工具构建",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "微信小程序",
+    "声乐评测",
+    "音频分析",
+    "音乐教育"
+  ],
+  "author": "Voice Evaluation Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/voice-evaluation-miniprogram.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/voice-evaluation-miniprogram/issues"
+  },
+  "homepage": "https://github.com/your-username/voice-evaluation-miniprogram#readme",
+  "devDependencies": {},
+  "dependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
+

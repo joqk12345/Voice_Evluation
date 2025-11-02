@@ -1,0 +1,1223 @@
+/* 每日挑战页面样式 */
+.challenge-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%);
+  position: relative;
+  padding-bottom: 120rpx;
+}
+
+/* 背景装饰 */
+.challenge-decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.decoration-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+  opacity: 0.1;
+  animation: float 6s ease-in-out infinite;
+}
+
+.circle-1 {
+  width: 200rpx;
+  height: 200rpx;
+  top: 10%;
+  right: -50rpx;
+  animation-delay: 0s;
+}
+
+.circle-2 {
+  width: 150rpx;
+  height: 150rpx;
+  top: 30%;
+  left: -30rpx;
+  animation-delay: 2s;
+}
+
+.circle-3 {
+  width: 100rpx;
+  height: 100rpx;
+  top: 60%;
+  right: 20%;
+  animation-delay: 4s;
+}
+
+.decoration-line {
+  position: absolute;
+  background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+  opacity: 0.05;
+}
+
+.line-1 {
+  width: 300rpx;
+  height: 2rpx;
+  top: 20%;
+  left: 10%;
+  transform: rotate(15deg);
+}
+
+.line-2 {
+  width: 250rpx;
+  height: 2rpx;
+  top: 70%;
+  right: 15%;
+  transform: rotate(-15deg);
+}
+
+/* 页面头部 */
+.challenge-header {
+  padding: 32rpx 24rpx;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.challenge-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3rpx;
+  background: linear-gradient(90deg, var(--accent-color), var(--primary-light), var(--accent-color));
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.header-title {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.title-text {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: var(--bg-primary);
+}
+
+.title-subtitle {
+  font-size: 24rpx;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.header-stats {
+  display: flex;
+  gap: 32rpx;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+}
+
+.stat-number {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--bg-primary);
+}
+
+.stat-label {
+  font-size: 20rpx;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* 今日挑战卡片 */
+.today-challenge-card {
+  margin: 24rpx;
+  background: var(--bg-primary);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  position: relative;
+}
+
+.today-challenge-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3rpx;
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--primary-color));
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32rpx;
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.card-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.card-date {
+  font-size: 24rpx;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+.header-right {
+  position: relative;
+}
+
+.progress-ring {
+  width: 80rpx;
+  height: 80rpx;
+  position: relative;
+}
+
+.ring-bg {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  position: absolute;
+}
+
+.ring-progress {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: conic-gradient(var(--accent-color) 0deg, var(--accent-color) var(--progress-angle, 0deg), var(--bg-secondary) var(--progress-angle, 0deg));
+  position: absolute;
+  transition: transform 0.3s ease;
+}
+
+.ring-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.progress-number {
+  font-size: 18rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* 挑战任务列表 */
+.challenge-tasks {
+  padding: 0 32rpx 32rpx;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.task-item:last-child {
+  border-bottom: none;
+}
+
+.task-item:active {
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-md);
+  margin: 0 -16rpx;
+  padding: 24rpx 16rpx;
+}
+
+.task-icon {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.task-icon.completed {
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-light));
+}
+
+.task-icon::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: rotate(45deg);
+  transition: all 0.6s ease;
+}
+
+.task-icon:active::before {
+  transform: rotate(45deg) translate(100%, 100%);
+}
+
+.icon-text {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--bg-primary);
+  position: relative;
+  z-index: 2;
+}
+
+.task-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.task-reward {
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-light));
+  padding: 4rpx 12rpx;
+  border-radius: var(--border-radius-sm);
+}
+
+.reward-text {
+  font-size: 20rpx;
+  font-weight: 600;
+  color: var(--bg-primary);
+}
+
+.task-desc {
+  font-size: 24rpx;
+  font-weight: 400;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.task-progress {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 8rpx;
+  background: var(--bg-secondary);
+  border-radius: 4rpx;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-color), var(--accent-light));
+  border-radius: 4rpx;
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+.progress-text {
+  font-size: 20rpx;
+  font-weight: 500;
+  color: var(--text-secondary);
+  min-width: 80rpx;
+  text-align: right;
+}
+
+.task-action {
+  padding: 12rpx 24rpx;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  border-radius: var(--border-radius-md);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.task-action::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.task-action:active::before {
+  left: 100%;
+}
+
+.action-text {
+  font-size: 22rpx;
+  font-weight: 600;
+  color: var(--bg-primary);
+  position: relative;
+  z-index: 2;
+}
+
+/* 成就部分 */
+.achievements-section,
+.leaderboard-section,
+.history-section {
+  margin: 24rpx;
+  background: var(--bg-primary);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  position: relative;
+}
+
+.achievements-section::before,
+.leaderboard-section::before,
+.history-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3rpx;
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--primary-color));
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32rpx 32rpx 0;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.section-more {
+  font-size: 24rpx;
+  font-weight: 400;
+  color: var(--primary-color);
+}
+
+/* 成就网格 */
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24rpx;
+  padding: 32rpx;
+}
+
+.achievement-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+  padding: 24rpx 16rpx;
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-md);
+  transition: all 0.3s ease;
+}
+
+.achievement-item:active {
+  transform: scale(0.95);
+  background: var(--primary-light);
+}
+
+.achievement-icon {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+  border: 2rpx solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.achievement-icon.unlocked {
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-light));
+  border-color: var(--accent-color);
+  box-shadow: 0 0 20rpx rgba(16, 185, 129, 0.3);
+}
+
+.achievement-icon.locked {
+  opacity: 0.5;
+  filter: grayscale(100%);
+}
+
+.achievement-emoji {
+  font-size: 28rpx;
+}
+
+.achievement-name {
+  font-size: 22rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.achievement-desc {
+  font-size: 18rpx;
+  font-weight: 400;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* 排行榜 */
+.leaderboard-list {
+  padding: 0 32rpx 32rpx;
+}
+
+.leaderboard-item {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.leaderboard-item:last-child {
+  border-bottom: none;
+}
+
+.rank-badge {
+  width: 50rpx;
+  height: 50rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rank-1 {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  box-shadow: 0 0 20rpx rgba(255, 215, 0, 0.3);
+}
+
+.rank-2 {
+  background: linear-gradient(135deg, #C0C0C0, #A0A0A0);
+  box-shadow: 0 0 20rpx rgba(192, 192, 192, 0.3);
+}
+
+.rank-3 {
+  background: linear-gradient(135deg, #CD7F32, #B8860B);
+  box-shadow: 0 0 20rpx rgba(205, 127, 50, 0.3);
+}
+
+.rank-number {
+  font-size: 24rpx;
+  font-weight: 700;
+  color: var(--bg-primary);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  flex: 1;
+}
+
+.user-avatar {
+  width: 50rpx;
+  height: 50rpx;
+  border-radius: 50%;
+  border: 2rpx solid var(--border-color);
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.user-name {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.user-score {
+  font-size: 20rpx;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+.user-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.stats-text {
+  font-size: 20rpx;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+/* 历史日历 */
+.history-calendar {
+  padding: 32rpx;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.calendar-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.calendar-nav {
+  display: flex;
+  gap: 16rpx;
+}
+
+.nav-btn {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.nav-btn:active {
+  background: var(--primary-color);
+  color: var(--bg-primary);
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8rpx;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-sm);
+  background: var(--bg-secondary);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.calendar-day.has-challenge {
+  background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
+}
+
+.calendar-day.completed {
+  background: linear-gradient(135deg, var(--accent-light), var(--accent-color));
+}
+
+.calendar-day:active {
+  transform: scale(0.9);
+}
+
+.day-number {
+  font-size: 20rpx;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.day-status {
+  position: absolute;
+  bottom: 4rpx;
+}
+
+.status-dot {
+  width: 8rpx;
+  height: 8rpx;
+  border-radius: 50%;
+}
+
+.status-dot.completed {
+  background: var(--accent-color);
+}
+
+.status-dot.pending {
+  background: var(--text-secondary);
+}
+
+/* 底部操作按钮 */
+.challenge-actions {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-primary);
+  padding: 24rpx;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 16rpx;
+  z-index: 100;
+}
+
+.action-btn {
+  flex: 1;
+  height: 88rpx;
+  border-radius: var(--border-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.action-btn.primary {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  box-shadow: var(--shadow-md);
+}
+
+.action-btn.secondary {
+  background: var(--bg-secondary);
+  border: 1rpx solid var(--border-color);
+}
+
+.action-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.action-btn:active::before {
+  left: 100%;
+}
+
+.btn-icon {
+  font-size: 28rpx;
+  position: relative;
+  z-index: 2;
+}
+
+.btn-text {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--bg-primary);
+  position: relative;
+  z-index: 2;
+}
+
+.action-btn.secondary .btn-text {
+  color: var(--text-primary);
+}
+
+/* 挑战详情弹窗 */
+.challenge-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.challenge-modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  width: 600rpx;
+  background: var(--bg-primary);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.modal-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3rpx;
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--primary-color));
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32rpx;
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.modal-close {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+}
+
+.modal-close:active {
+  background: var(--primary-color);
+  color: var(--bg-primary);
+}
+
+.modal-body {
+  padding: 32rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.modal-desc {
+  font-size: 26rpx;
+  font-weight: 400;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.modal-reward {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 16rpx;
+  background: linear-gradient(135deg, var(--accent-light), var(--accent-color));
+  border-radius: var(--border-radius-md);
+}
+
+.reward-label {
+  font-size: 24rpx;
+  font-weight: 500;
+  color: var(--bg-primary);
+}
+
+.reward-value {
+  font-size: 24rpx;
+  font-weight: 700;
+  color: var(--bg-primary);
+}
+
+.modal-tips {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  padding: 16rpx;
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius-md);
+}
+
+.tips-title {
+  font-size: 22rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.tips-content {
+  font-size: 22rpx;
+  font-weight: 400;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 16rpx;
+  padding: 32rpx;
+  border-top: 1rpx solid var(--border-color);
+}
+
+.modal-btn {
+  flex: 1;
+  height: 80rpx;
+  border-radius: var(--border-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26rpx;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.modal-btn.cancel {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1rpx solid var(--border-color);
+}
+
+.modal-btn.confirm {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  color: var(--bg-primary);
+  box-shadow: var(--shadow-md);
+}
+
+.modal-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.modal-btn:active::before {
+  left: 100%;
+}
+
+/* 动画效果 */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20rpx);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 750rpx) {
+  .challenge-header {
+    padding: 24rpx 16rpx;
+  }
+  
+  .title-text {
+    font-size: 32rpx;
+  }
+  
+  .title-subtitle {
+    font-size: 22rpx;
+  }
+  
+  .header-stats {
+    gap: 24rpx;
+  }
+  
+  .stat-number {
+    font-size: 28rpx;
+  }
+  
+  .stat-label {
+    font-size: 18rpx;
+  }
+  
+  .today-challenge-card,
+  .achievements-section,
+  .leaderboard-section,
+  .history-section {
+    margin: 16rpx;
+  }
+  
+  .card-header {
+    padding: 24rpx;
+  }
+  
+  .card-title {
+    font-size: 28rpx;
+  }
+  
+  .card-date {
+    font-size: 22rpx;
+  }
+  
+  .progress-ring {
+    width: 70rpx;
+    height: 70rpx;
+  }
+  
+  .progress-number {
+    font-size: 16rpx;
+  }
+  
+  .challenge-tasks {
+    padding: 0 24rpx 24rpx;
+  }
+  
+  .task-item {
+    gap: 16rpx;
+    padding: 20rpx 0;
+  }
+  
+  .task-icon {
+    width: 50rpx;
+    height: 50rpx;
+  }
+  
+  .icon-text {
+    font-size: 24rpx;
+  }
+  
+  .task-title {
+    font-size: 26rpx;
+  }
+  
+  .task-desc {
+    font-size: 22rpx;
+  }
+  
+  .task-action {
+    padding: 10rpx 20rpx;
+  }
+  
+  .action-text {
+    font-size: 20rpx;
+  }
+  
+  .achievements-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16rpx;
+    padding: 24rpx;
+  }
+  
+  .achievement-item {
+    padding: 20rpx 12rpx;
+  }
+  
+  .achievement-icon {
+    width: 50rpx;
+    height: 50rpx;
+  }
+  
+  .achievement-emoji {
+    font-size: 24rpx;
+  }
+  
+  .achievement-name {
+    font-size: 20rpx;
+  }
+  
+  .achievement-desc {
+    font-size: 16rpx;
+  }
+  
+  .leaderboard-list {
+    padding: 0 24rpx 24rpx;
+  }
+  
+  .leaderboard-item {
+    gap: 16rpx;
+    padding: 20rpx 0;
+  }
+  
+  .rank-badge {
+    width: 40rpx;
+    height: 40rpx;
+  }
+  
+  .rank-number {
+    font-size: 20rpx;
+  }
+  
+  .user-avatar {
+    width: 40rpx;
+    height: 40rpx;
+  }
+  
+  .user-name {
+    font-size: 22rpx;
+  }
+  
+  .user-score {
+    font-size: 18rpx;
+  }
+  
+  .stats-text {
+    font-size: 18rpx;
+  }
+  
+  .history-calendar {
+    padding: 24rpx;
+  }
+  
+  .calendar-title {
+    font-size: 26rpx;
+  }
+  
+  .nav-btn {
+    width: 36rpx;
+    height: 36rpx;
+    font-size: 22rpx;
+  }
+  
+  .day-number {
+    font-size: 18rpx;
+  }
+  
+  .status-dot {
+    width: 6rpx;
+    height: 6rpx;
+  }
+  
+  .challenge-actions {
+    padding: 20rpx 16rpx;
+  }
+  
+  .action-btn {
+    height: 80rpx;
+  }
+  
+  .btn-icon {
+    font-size: 26rpx;
+  }
+  
+  .btn-text {
+    font-size: 24rpx;
+  }
+  
+  .modal-content {
+    width: 90%;
+    margin: 0 5%;
+  }
+  
+  .modal-header {
+    padding: 24rpx;
+  }
+  
+  .modal-title {
+    font-size: 28rpx;
+  }
+  
+  .modal-close {
+    width: 36rpx;
+    height: 36rpx;
+    font-size: 24rpx;
+  }
+  
+  .modal-body {
+    padding: 24rpx;
+    gap: 20rpx;
+  }
+  
+  .modal-desc {
+    font-size: 24rpx;
+  }
+  
+  .modal-reward {
+    padding: 12rpx;
+  }
+  
+  .reward-label,
+  .reward-value {
+    font-size: 22rpx;
+  }
+  
+  .modal-tips {
+    padding: 12rpx;
+  }
+  
+  .tips-title {
+    font-size: 20rpx;
+  }
+  
+  .tips-content {
+    font-size: 20rpx;
+  }
+  
+  .modal-actions {
+    padding: 24rpx;
+    gap: 12rpx;
+  }
+  
+  .modal-btn {
+    height: 72rpx;
+    font-size: 24rpx;
+  }
+}
+

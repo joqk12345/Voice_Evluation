@@ -1,0 +1,162 @@
+<!--pages/record/record.wxml - 专业音频分析风格-->
+
+<view class="record-container">
+  <!-- 音频波形装饰 -->
+  <view class="audio-wave-decoration">
+    <view class="wave-line"></view>
+    <view class="wave-line"></view>
+    <view class="wave-line"></view>
+    <view class="wave-line"></view>
+    <view class="wave-line"></view>
+    <view class="wave-line"></view>
+    <view class="wave-line"></view>
+    <view class="wave-line"></view>
+  </view>
+
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">声乐评测</text>
+    <text class="page-subtitle">专业音频分析工具</text>
+  </view>
+
+  <!-- 录音状态指示器 -->
+  <view class="record-status">
+    <view class="status-indicator {{isRecording ? 'recording' : ''}}">
+      <view class="status-dot"></view>
+      <text class="status-text">{{isRecording ? '录音中...' : '准备录音'}}</text>
+    </view>
+  </view>
+
+  <!-- 主要录音区域 -->
+  <view class="record-main">
+    <!-- 录音控制卡片 -->
+    <view class="record-control-card">
+      <view class="control-header">
+        <view class="record-button {{isRecording ? 'recording' : ''}}" bindtap="toggleRecord">
+          <view class="record-icon">🎤</view>
+        </view>
+        
+        <view class="record-info">
+          <view class="info-section">
+            <text class="section-label">准备录音</text>
+            <view class="info-details">
+              <view class="info-row">
+                <text class="info-label">录音时长</text>
+                <text class="info-value">{{formatTime(recordTime)}}</text>
+              </view>
+              <view class="info-row">
+                <text class="info-label">设置时长</text>
+                <text class="info-value">{{durationOptions[selectedDurationIndex].label}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 录音提示卡片 -->
+    <view class="instruction-card">
+      <view class="instruction-icon">💡</view>
+      <text class="instruction-text">请选择一个安静的环境，准备开始录音</text>
+    </view>
+
+    <!-- 评测设置卡片 -->
+    <view class="settings-card">
+      <view class="settings-header">
+        <text class="settings-title">评测设置</text>
+      </view>
+      
+      <view class="settings-content">
+        <view class="setting-item">
+          <view class="setting-label">
+            <text class="label-text">录音时长</text>
+            <text class="label-desc">选择录音时长</text>
+          </view>
+          <picker 
+            range="{{durationOptions}}" 
+            range-key="label"
+            value="{{selectedDurationIndex}}"
+            bindchange="onDurationChange"
+          >
+            <view class="setting-value">
+              <text class="value-text">{{durationOptions[selectedDurationIndex].label}}</text>
+              <text class="arrow-icon">></text>
+            </view>
+          </picker>
+        </view>
+
+        <view class="setting-divider"></view>
+
+        <view class="setting-item">
+          <view class="setting-label">
+            <text class="label-text">评测类型</text>
+            <text class="label-desc">选择评测类型</text>
+          </view>
+          <picker 
+            range="{{testTypes}}" 
+            range-key="name"
+            value="{{selectedTestTypeIndex}}"
+            bindchange="onTestTypeChange"
+          >
+            <view class="setting-value">
+              <text class="value-text">{{testTypes[selectedTestTypeIndex].name}}</text>
+              <text class="arrow-icon">></text>
+            </view>
+          </picker>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部操作区域 -->
+  <view class="action-section">
+    <view class="action-buttons">
+      <button class="btn btn-outline" bindtap="playDemo" wx:if="{{!hasRecorded}}">
+        <view class="btn-icon">♫</view>
+        <text class="btn-text">试听示例</text>
+      </button>
+      
+      <button class="btn btn-primary" bindtap="startRecord" wx:if="{{!hasRecorded}}">
+        <view class="btn-icon">🎤</view>
+        <text class="btn-text">开始录音</text>
+      </button>
+
+      <view class="recorded-actions" wx:if="{{hasRecorded}}">
+        <button class="btn btn-outline" bindtap="playRecord">
+          <view class="btn-icon">▶️</view>
+          <text class="btn-text">播放录音</text>
+        </button>
+        
+        <button class="btn btn-primary" bindtap="analyzeRecord">
+          <view class="btn-icon">📊</view>
+          <text class="btn-text">开始分析</text>
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 录音完成后的操作 -->
+  <view class="completed-actions" wx:if="{{recordCompleted}}">
+    <view class="completion-card">
+      <view class="completion-icon">✅</view>
+      <view class="completion-content">
+        <text class="completion-title">录音完成！</text>
+        <text class="completion-desc">点击下方按钮开始分析您的声乐表现</text>
+      </view>
+    </view>
+    
+    <button class="btn btn-secondary btn-large" bindtap="analyzeRecord">
+      <view class="btn-icon">📊</view>
+      <text class="btn-text">开始分析</text>
+    </button>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-overlay" wx:if="{{isAnalyzing}}">
+    <view class="loading-content">
+      <view class="loading-spinner"></view>
+      <text class="loading-text">正在分析您的录音...</text>
+      <text class="loading-desc">请稍候，这可能需要几秒钟</text>
+    </view>
+  </view>
+</view>

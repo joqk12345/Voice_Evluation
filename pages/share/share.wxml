@@ -1,0 +1,158 @@
+<!--pages/share/share.wxml-->
+<view class="share-container">
+  <!-- 评测结果预览 -->
+  <view class="result-preview">
+    <view class="preview-header">
+      <text class="preview-title">我的声乐评测结果</text>
+      <text class="preview-subtitle">分享我的音乐之旅</text>
+    </view>
+    
+    <view class="preview-card">
+      <view class="score-display">
+        <text class="score-value">{{evaluationResult.score}}</text>
+        <text class="score-label">分</text>
+      </view>
+      
+      <view class="result-details">
+        <view class="detail-item">
+          <text class="detail-label">音准</text>
+          <text class="detail-value">{{evaluationResult.pitch}}分</text>
+        </view>
+        <view class="detail-item">
+          <text class="detail-label">节奏</text>
+          <text class="detail-value">{{evaluationResult.rhythm}}分</text>
+        </view>
+        <view class="detail-item">
+          <text class="detail-label">音色</text>
+          <text class="detail-value">{{evaluationResult.timbre}}分</text>
+        </view>
+        <view class="detail-item">
+          <text class="detail-label">音量</text>
+          <text class="detail-value">{{evaluationResult.volume}}分</text>
+        </view>
+      </view>
+      
+      <view class="result-summary">
+        <text class="summary-text">{{evaluationResult.summary}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 分享平台选择 -->
+  <view class="share-platforms">
+    <view class="platform-header">
+      <text class="platform-title">选择分享平台</text>
+    </view>
+    
+    <view class="platform-grid">
+      <view class="platform-item" bindtap="generatePlatformImage" data-platform="wechat">
+        <view class="platform-icon wechat">💚</view>
+        <text class="platform-name">微信朋友圈</text>
+        <text class="platform-desc">简约商务风</text>
+      </view>
+      
+      <view class="platform-item" bindtap="generatePlatformImage" data-platform="xiaohongshu">
+        <view class="platform-icon xiaohongshu">📱</view>
+        <text class="platform-name">小红书</text>
+        <text class="platform-desc">清新文艺风</text>
+      </view>
+      
+      <view class="platform-item" bindtap="generatePlatformImage" data-platform="xianyu">
+        <view class="platform-icon xianyu">🐟</view>
+        <text class="platform-name">闲鱼</text>
+        <text class="platform-desc">生活化风格</text>
+      </view>
+      
+      <view class="platform-item" bindtap="generatePlatformImage" data-platform="zhihu">
+        <view class="platform-icon zhihu">📝</view>
+        <text class="platform-name">知乎</text>
+        <text class="platform-desc">专业学术风</text>
+      </view>
+      
+      <view class="platform-item" bindtap="generatePlatformImage" data-platform="douyin">
+        <view class="platform-icon douyin">🎵</view>
+        <text class="platform-name">抖音</text>
+        <text class="platform-desc">潮流炫酷风</text>
+      </view>
+      
+      <view class="platform-item" bindtap="generatePlatformImage" data-platform="weibo">
+        <view class="platform-icon weibo">📢</view>
+        <text class="platform-name">微博</text>
+        <text class="platform-desc">热点话题风</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 分享内容编辑 -->
+  <view class="share-content">
+    <view class="content-header">
+      <text class="content-title">分享内容</text>
+    </view>
+    
+    <view class="content-editor">
+      <textarea 
+        class="content-textarea" 
+        placeholder="分享你的声乐评测心得..." 
+        value="{{shareText}}"
+        bindinput="onShareTextInput"
+        maxlength="200"
+        show-confirm-bar="{{false}}"
+      ></textarea>
+      <view class="char-count">{{shareText.length}}/200</view>
+    </view>
+    
+    <view class="content-templates">
+      <text class="template-title">快速模板：</text>
+      <view class="template-list">
+        <view class="template-item" bindtap="useTemplate" data-template="1">
+          <text class="template-text">🎵 我的声乐评测得了{{evaluationResult.score}}分！快来测试你的声音吧！</text>
+        </view>
+        <view class="template-item" bindtap="useTemplate" data-template="2">
+          <text class="template-text">🎤 专业声乐评测，AI分析音准节奏，我的表现还不错！</text>
+        </view>
+        <view class="template-item" bindtap="useTemplate" data-template="3">
+          <text class="template-text">🎯 发现了一个超棒的声乐评测小程序，快来试试你的声音！</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 图片预览 -->
+  <view class="image-preview" wx:if="{{generatedImage}}">
+    <view class="preview-header">
+      <text class="preview-title">生成的分享图片</text>
+    </view>
+    <image class="preview-image" src="{{generatedImage}}" mode="aspectFit"></image>
+    <view class="preview-actions">
+      <button class="preview-btn" bindtap="saveImageToAlbum">
+        <text class="btn-icon">💾</text>
+        <text class="btn-text">保存到相册</text>
+      </button>
+    </view>
+  </view>
+
+  <!-- 分享按钮 -->
+  <view class="share-footer">
+    <view class="action-control" bindtap="generateShareImage">
+      <view class="control-dots">⋯</view>
+      <view class="control-record">●</view>
+    </view>
+    <view class="action-control primary" bindtap="copyShareContent">
+      <view class="control-dots">⋯</view>
+      <view class="control-record">●</view>
+    </view>
+  </view>
+
+  <!-- 小程序码说明 -->
+  <view class="qr-tip">
+    <view class="tip-icon">💡</view>
+    <text class="tip-text">提示：分享图片中的二维码为演示效果，实际使用时需要替换为真实的小程序码。您可以在微信公众平台生成小程序码并替换图片中的二维码部分。</text>
+  </view>
+
+  <!-- 隐藏的Canvas用于生成图片 -->
+  <canvas 
+    canvas-id="scoreCanvas" 
+    class="score-canvas"
+    style="width: 375px; height: 600px; position: fixed; top: -9999px; left: -9999px;"
+  ></canvas>
+</view>

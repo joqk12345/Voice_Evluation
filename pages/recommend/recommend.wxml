@@ -1,0 +1,198 @@
+<!--pages/recommend/recommend.wxml-->
+<view class="recommend-container">
+  <!-- 用户水平卡片 -->
+  <view class="level-card card">
+    <view class="level-header">
+      <text class="level-title">您的声乐水平</text>
+      <text class="level-badge">{{userLevel}}</text>
+    </view>
+    <view class="level-progress">
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{levelProgress}}%;"></view>
+      </view>
+      <text class="progress-text">{{levelProgress}}% 完成度</text>
+    </view>
+  </view>
+
+  <!-- 一对一声乐课推荐 -->
+  <view class="tutor-section card">
+    <view class="section-header">
+      <text class="section-title">🎓 专业声乐指导</text>
+      <text class="section-subtitle">一对一在线声乐课，快速提升</text>
+    </view>
+    
+    <view class="tutor-content">
+      <view class="tutor-benefits">
+        <view class="benefit-item">
+          <text class="benefit-icon">👨‍🏫</text>
+          <view class="benefit-text">
+            <text class="benefit-title">专业老师</text>
+            <text class="benefit-desc">音乐学院毕业，5年以上教学经验</text>
+          </view>
+        </view>
+        <view class="benefit-item">
+          <text class="benefit-icon">💻</text>
+          <view class="benefit-text">
+            <text class="benefit-title">在线授课</text>
+            <text class="benefit-desc">随时随地，在家就能上课</text>
+          </view>
+        </view>
+        <view class="benefit-item">
+          <text class="benefit-icon">🎯</text>
+          <view class="benefit-text">
+            <text class="benefit-title">个性化指导</text>
+            <text class="benefit-desc">根据您的评测结果定制课程</text>
+          </view>
+        </view>
+      </view>
+      
+      <view class="tutor-pricing">
+        <view class="price-item">
+          <text class="price-label">试听课程</text>
+          <text class="price-value">免费</text>
+        </view>
+        <view class="price-item">
+          <text class="price-label">单次课程</text>
+          <text class="price-value">¥199</text>
+        </view>
+        <view class="price-item highlight">
+          <text class="price-label">包月课程</text>
+          <text class="price-value">¥599</text>
+          <text class="price-desc">8节课，立省¥993</text>
+        </view>
+      </view>
+      
+      <button class="tutor-book-btn" bindtap="bookTutorClass">
+        <text class="btn-icon">📅</text>
+        <text>立即预约试听</text>
+      </button>
+    </view>
+  </view>
+
+  <!-- 练习计划 -->
+  <view class="practice-section card">
+    <view class="section-header">
+      <text class="section-title">个性化练习计划</text>
+      <text class="section-subtitle">根据您的评测结果定制</text>
+    </view>
+    
+    <view class="practice-list">
+      <view class="practice-item" wx:for="{{practicePlans}}" wx:key="index">
+        <view class="practice-header">
+          <view class="practice-icon">{{item.icon}}</view>
+          <view class="practice-info">
+            <text class="practice-name">{{item.type}}</text>
+            <text class="practice-desc">{{item.description}}</text>
+          </view>
+          <view class="practice-duration">
+            <text class="duration-text">{{item.duration}}</text>
+            <text class="frequency-text">{{item.frequency}}</text>
+          </view>
+        </view>
+        
+        <view class="practice-actions">
+          <button class="btn btn-outline btn-small" bindtap="startPractice" data-type="{{item.type}}">
+            <text class="btn-icon">▶️</text>
+            <text>开始练习</text>
+          </button>
+          <button class="btn btn-primary btn-small" bindtap="setReminder" data-type="{{item.type}}">
+            <text class="btn-icon">⏰</text>
+            <text>设置提醒</text>
+          </button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 推荐歌曲 -->
+  <view class="songs-section card">
+    <view class="section-header">
+      <text class="section-title">推荐歌曲</text>
+      <text class="section-subtitle">适合您当前水平的歌曲</text>
+    </view>
+    
+    <view class="songs-list">
+      <view class="song-item" wx:for="{{recommendedSongs}}" wx:key="index">
+        <view class="song-cover">
+          <text class="cover-icon">🎵</text>
+        </view>
+        
+        <view class="song-info">
+          <text class="song-name">{{item.name}}</text>
+          <text class="song-artist">{{item.artist}}</text>
+          <view class="song-tags">
+            <text class="song-tag difficulty-{{item.difficultyClass}}">{{item.difficulty}}</text>
+            <text class="song-tag">适合练习</text>
+          </view>
+        </view>
+        
+        <view class="song-actions">
+          <button class="btn btn-outline btn-small" bindtap="previewSong" data-song="{{item}}">
+            <text class="btn-icon">🎧</text>
+            <text>试听</text>
+          </button>
+          <button class="btn btn-primary btn-small" bindtap="selectSong" data-song="{{item}}">
+            <text class="btn-icon">🎤</text>
+            <text>选择</text>
+          </button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 技巧指导 -->
+  <view class="tips-section card">
+    <view class="section-header">
+      <text class="section-title">声乐技巧指导</text>
+    </view>
+    
+    <view class="tips-list">
+      <view class="tip-item" wx:for="{{vocalTips}}" wx:key="index">
+        <view class="tip-header">
+          <view class="tip-icon">{{item.icon}}</view>
+          <text class="tip-title">{{item.title}}</text>
+        </view>
+        <text class="tip-content">{{item.content}}</text>
+        <view class="tip-video" wx:if="{{item.hasVideo}}">
+          <button class="btn btn-outline btn-small" bindtap="watchVideo" data-tip="{{item}}">
+            <text class="btn-icon">📹</text>
+            <text>观看视频</text>
+          </button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 每日挑战 -->
+  <view class="challenge-section card">
+    <view class="section-header">
+      <text class="section-title">每日挑战</text>
+      <text class="section-subtitle">完成挑战获得奖励</text>
+    </view>
+    
+    <view class="challenge-item">
+      <view class="challenge-header">
+        <view class="challenge-icon">🏆</view>
+        <view class="challenge-info">
+          <text class="challenge-name">{{dailyChallenge.name}}</text>
+          <text class="challenge-desc">{{dailyChallenge.description}}</text>
+        </view>
+        <view class="challenge-reward">
+          <text class="reward-text">+{{dailyChallenge.reward}}分</text>
+        </view>
+      </view>
+      
+      <view class="challenge-progress">
+        <view class="progress-bar">
+          <view class="progress-fill" style="width: {{challengeProgress}}%;"></view>
+        </view>
+        <text class="progress-text">{{challengeProgress}}% 完成</text>
+      </view>
+      
+      <button class="btn btn-secondary" bindtap="startChallenge">
+        <text class="btn-icon">🎯</text>
+        <text>开始挑战</text>
+      </button>
+    </view>
+  </view>
+</view>

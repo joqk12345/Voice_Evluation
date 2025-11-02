@@ -1,0 +1,409 @@
+/* pages/share/share.wxss - 专业音频分析风格 */
+
+.share-container {
+  padding: 24rpx;
+  background: var(--bg-secondary);
+  min-height: 100vh;
+}
+
+/* 专业评测结果预览 */
+.result-preview {
+  background: var(--bg-primary);
+  border-radius: var(--border-radius-lg);
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: var(--shadow);
+  border: 1rpx solid var(--border-color);
+}
+
+.preview-header {
+  text-align: center;
+  margin-bottom: 30rpx;
+}
+
+.preview-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.preview-subtitle {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.preview-card {
+  background: linear-gradient(135deg, #008080, #20B2AA);
+  border-radius: 16rpx;
+  padding: 30rpx;
+  color: white;
+}
+
+.score-display {
+  text-align: center;
+  margin-bottom: 30rpx;
+}
+
+.score-value {
+  font-size: 80rpx;
+  font-weight: bold;
+  margin-right: 10rpx;
+}
+
+.score-label {
+  font-size: 32rpx;
+  opacity: 0.8;
+}
+
+.result-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20rpx;
+  margin-bottom: 25rpx;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12rpx;
+  backdrop-filter: blur(10rpx);
+}
+
+.detail-label {
+  font-size: 24rpx;
+  opacity: 0.9;
+}
+
+.detail-value {
+  font-size: 24rpx;
+  font-weight: bold;
+}
+
+.result-summary {
+  text-align: center;
+  padding: 20rpx;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12rpx;
+}
+
+.summary-text {
+  font-size: 24rpx;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+/* 分享平台选择 */
+.share-platforms {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+}
+
+.platform-header {
+  margin-bottom: 25rpx;
+}
+
+.platform-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.platform-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20rpx;
+}
+
+.platform-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 25rpx 15rpx;
+  background: #f8f8f8;
+  border-radius: 16rpx;
+  transition: all 0.3s ease;
+}
+
+.platform-item:active {
+  transform: scale(0.95);
+  background: #e8e8e8;
+}
+
+.platform-icon {
+  font-size: 50rpx;
+  margin-bottom: 15rpx;
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.platform-icon.wechat {
+  background: linear-gradient(135deg, #07C160, #00D4AA);
+}
+
+.platform-icon.xiaohongshu {
+  background: linear-gradient(135deg, #FF2442, #FF6B6B);
+}
+
+.platform-icon.xianyu {
+  background: linear-gradient(135deg, #FF6B35, #F7931E);
+}
+
+.platform-icon.zhihu {
+  background: linear-gradient(135deg, #0084FF, #00A8FF);
+}
+
+.platform-icon.douyin {
+  background: linear-gradient(135deg, #000000, #333333);
+}
+
+.platform-icon.weibo {
+  background: linear-gradient(135deg, #E6162D, #FF4757);
+}
+
+.platform-name {
+  font-size: 22rpx;
+  color: #333;
+  text-align: center;
+  font-weight: 500;
+  margin-bottom: 5rpx;
+}
+
+.platform-desc {
+  font-size: 18rpx;
+  color: #666;
+  text-align: center;
+  opacity: 0.8;
+}
+
+/* 分享内容编辑 */
+.share-content {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+}
+
+.content-header {
+  margin-bottom: 20rpx;
+}
+
+.content-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.content-editor {
+  position: relative;
+  margin-bottom: 25rpx;
+}
+
+.content-textarea {
+  width: 100%;
+  min-height: 200rpx;
+  padding: 20rpx;
+  border: 2rpx solid #e0e0e0;
+  border-radius: 12rpx;
+  font-size: 26rpx;
+  line-height: 1.5;
+  background: #fafafa;
+}
+
+.content-textarea:focus {
+  border-color: #008080;
+  background: white;
+}
+
+.char-count {
+  position: absolute;
+  bottom: 10rpx;
+  right: 15rpx;
+  font-size: 20rpx;
+  color: #999;
+}
+
+.content-templates {
+  margin-top: 20rpx;
+}
+
+.template-title {
+  display: block;
+  font-size: 24rpx;
+  color: #666;
+  margin-bottom: 15rpx;
+}
+
+.template-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.template-item {
+  padding: 15rpx;
+  background: #f0f8ff;
+  border-radius: 12rpx;
+  border-left: 4rpx solid #008080;
+  transition: all 0.3s ease;
+}
+
+.template-item:active {
+  background: #e0f0ff;
+  transform: scale(0.98);
+}
+
+.template-text {
+  font-size: 24rpx;
+  color: #333;
+  line-height: 1.4;
+}
+
+/* 分享按钮 */
+.share-footer {
+  display: flex;
+  gap: 20rpx;
+  padding: 20rpx 0;
+  align-items: center;
+}
+
+.action-control {
+  background: var(--bg-primary);
+  border: 1rpx solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  width: 80rpx;
+  height: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8rpx;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.action-control.primary {
+  background: var(--accent-color);
+  border-color: var(--accent-dark);
+}
+
+.action-control:active {
+  transform: scale(0.95);
+  box-shadow: var(--shadow);
+}
+
+.control-dots {
+  font-size: 16rpx;
+  color: var(--text-tertiary);
+  font-weight: bold;
+  letter-spacing: 2rpx;
+}
+
+.action-control.primary .control-dots {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.control-record {
+  font-size: 12rpx;
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+.action-control.primary .control-record {
+  color: white;
+}
+
+/* 图片预览 */
+.image-preview {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+}
+
+.preview-header {
+  margin-bottom: 20rpx;
+}
+
+.preview-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.preview-image {
+  width: 100%;
+  max-width: 375rpx;
+  height: 600rpx;
+  border-radius: 12rpx;
+  margin: 0 auto;
+  display: block;
+}
+
+.preview-actions {
+  margin-top: 20rpx;
+  text-align: center;
+}
+
+.preview-btn {
+  background: #008080;
+  color: white;
+  border: none;
+  border-radius: 25rpx;
+  padding: 15rpx 30rpx;
+  font-size: 26rpx;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.preview-btn:active {
+  transform: scale(0.95);
+  background: #006666;
+}
+
+/* 小程序码说明 */
+.qr-tip {
+  background: #fff3cd;
+  border: 1rpx solid #ffeaa7;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  margin: 20rpx 0;
+  display: flex;
+  align-items: flex-start;
+}
+
+.tip-icon {
+  font-size: 32rpx;
+  margin-right: 15rpx;
+  margin-top: 5rpx;
+}
+
+.tip-text {
+  flex: 1;
+  font-size: 24rpx;
+  color: #856404;
+  line-height: 1.5;
+}
+
+/* Canvas样式 */
+.score-canvas {
+  position: fixed;
+  top: -9999px;
+  left: -9999px;
+  width: 375px;
+  height: 600px;
+  z-index: -1;
+}

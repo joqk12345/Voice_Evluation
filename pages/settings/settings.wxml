@@ -1,0 +1,338 @@
+<!--设置页面-->
+<view class="settings-container">
+  <!-- 背景装饰 -->
+  <view class="settings-decoration">
+    <view class="decoration-gear gear-1">⚙️</view>
+    <view class="decoration-gear gear-2">⚙️</view>
+    <view class="decoration-gear gear-3">⚙️</view>
+    <view class="decoration-line line-1"></view>
+    <view class="decoration-line line-2"></view>
+  </view>
+
+  <!-- 页面头部 -->
+  <view class="settings-header">
+    <view class="header-content">
+      <view class="header-title">
+        <text class="title-text">设置</text>
+        <text class="title-subtitle">个性化你的声乐评测体验</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 用户信息设置 -->
+  <view class="settings-section">
+    <view class="section-header">
+      <text class="section-title">个人信息</text>
+    </view>
+    <view class="settings-list">
+      <view class="setting-item" bindtap="editProfile">
+        <view class="setting-icon">👤</view>
+        <view class="setting-content">
+          <text class="setting-title">个人资料</text>
+          <text class="setting-desc">编辑头像、昵称等信息</text>
+        </view>
+        <view class="setting-arrow">›</view>
+      </view>
+      <view class="setting-item" bindtap="editPreferences">
+        <view class="setting-icon">🎨</view>
+        <view class="setting-content">
+          <text class="setting-title">偏好设置</text>
+          <text class="setting-desc">个性化你的使用体验</text>
+        </view>
+        <view class="setting-arrow">›</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 评测设置 -->
+  <view class="settings-section">
+    <view class="section-header">
+      <text class="section-title">评测设置</text>
+    </view>
+    <view class="settings-list">
+      <view class="setting-item">
+        <view class="setting-icon">🎵</view>
+        <view class="setting-content">
+          <text class="setting-title">默认评测时长</text>
+          <text class="setting-desc">设置默认的录音时长</text>
+        </view>
+        <view class="setting-value">
+          <picker mode="selector" range="{{durationOptions}}" range-key="label" value="{{selectedDurationIndex}}" bindchange="onDurationChange">
+            <text class="value-text">{{durationOptions[selectedDurationIndex].label}}</text>
+          </picker>
+        </view>
+      </view>
+      <view class="setting-item">
+        <view class="setting-icon">🔊</view>
+        <view class="setting-content">
+          <text class="setting-title">音量阈值</text>
+          <text class="setting-desc">设置录音的音量检测阈值</text>
+        </view>
+        <view class="setting-value">
+          <slider value="{{volumeThreshold}}" min="0" max="100" step="5" bindchange="onVolumeThresholdChange" activeColor="#10B981" backgroundColor="#E5E7EB"/>
+          <text class="value-text">{{volumeThreshold}}%</text>
+        </view>
+      </view>
+      <view class="setting-item">
+        <view class="setting-icon">🎯</view>
+        <view class="setting-content">
+          <text class="setting-title">评测精度</text>
+          <text class="setting-desc">设置评测分析的精度等级</text>
+        </view>
+        <view class="setting-value">
+          <picker mode="selector" range="{{precisionOptions}}" range-key="label" value="{{selectedPrecisionIndex}}" bindchange="onPrecisionChange">
+            <text class="value-text">{{precisionOptions[selectedPrecisionIndex].label}}</text>
+          </picker>
+        </view>
+      </view>
+      <view class="setting-item">
+        <view class="setting-icon">🔔</view>
+        <view class="setting-content">
+          <text class="setting-title">评测提醒</text>
+          <text class="setting-desc">设置评测完成后的提醒方式</text>
+        </view>
+        <view class="setting-value">
+          <switch checked="{{evaluationReminder}}" bindchange="onEvaluationReminderChange" color="#10B981"/>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 通知设置 -->
+  <view class="settings-section">
+    <view class="section-header">
+      <text class="section-title">通知设置</text>
+    </view>
+    <view class="settings-list">
+      <view class="setting-item">
+        <view class="setting-icon">📱</view>
+        <view class="setting-content">
+          <text class="setting-title">推送通知</text>
+          <text class="setting-desc">接收应用推送消息</text>
+        </view>
+        <view class="setting-value">
+          <switch checked="{{pushNotification}}" bindchange="onPushNotificationChange" color="#10B981"/>
+        </view>
+      </view>
+      <view class="setting-item">
+        <view class="setting-icon">⏰</view>
+        <view class="setting-content">
+          <text class="setting-title">练习提醒</text>
+          <text class="setting-desc">每日练习时间提醒</text>
+        </view>
+        <view class="setting-value">
+          <switch checked="{{practiceReminder}}" bindchange="onPracticeReminderChange" color="#10B981"/>
+        </view>
+      </view>
+      <view class="setting-item" wx:if="{{practiceReminder}}" bindtap="setReminderTime">
+        <view class="setting-icon">🕐</view>
+        <view class="setting-content">
+          <text class="setting-title">提醒时间</text>
+          <text class="setting-desc">设置每日练习提醒时间</text>
+        </view>
+        <view class="setting-value">
+          <text class="value-text">{{reminderTime}}</text>
+          <view class="setting-arrow">›</view>
+        </view>
+      </view>
+      <view class="setting-item">
+        <view class="setting-icon">🏆</view>
+        <view class="setting-content">
+          <text class="setting-title">成就通知</text>
+          <text class="setting-desc">成就解锁时的通知</text>
+        </view>
+        <view class="setting-value">
+          <switch checked="{{achievementNotification}}" bindchange="onAchievementNotificationChange" color="#10B981"/>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 隐私设置 -->
+  <view class="settings-section">
+    <view class="section-header">
+      <text class="section-title">隐私设置</text>
+    </view>
+    <view class="settings-list">
+      <view class="setting-item">
+        <view class="setting-icon">🔒</view>
+        <view class="setting-content">
+          <text class="setting-title">数据隐私</text>
+          <text class="setting-desc">控制个人数据的使用</text>
+        </view>
+        <view class="setting-arrow">›</view>
+      </view>
+      <view class="setting-item">
+        <view class="setting-icon">📊</view>
+        <view class="setting-content">
+          <text class="setting-title">数据统计</text>
+          <text class="setting-desc">允许匿名数据统计</text>
+        </view>
+        <view class="setting-value">
+          <switch checked="{{dataAnalytics}}" bindchange="onDataAnalyticsChange" color="#10B981"/>
+        </view>
+      </view>
+      <view class="setting-item">
+        <view class="setting-icon">🎤</view>
+        <view class="setting-content">
+          <text class="setting-title">录音权限</text>
+          <text class="setting-desc">管理录音权限设置</text>
+        </view>
+        <view class="setting-arrow">›</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 应用设置 -->
+  <view class="settings-section">
+    <view class="section-header">
+      <text class="section-title">应用设置</text>
+    </view>
+    <view class="settings-list">
+      <view class="setting-item">
+        <view class="setting-icon">🌙</view>
+        <view class="setting-content">
+          <text class="setting-title">深色模式</text>
+          <text class="setting-desc">使用深色主题</text>
+        </view>
+        <view class="setting-value">
+          <switch checked="{{darkMode}}" bindchange="onDarkModeChange" color="#10B981"/>
+        </view>
+      </view>
+      <view class="setting-item">
+        <view class="setting-icon">🔤</view>
+        <view class="setting-content">
+          <text class="setting-title">字体大小</text>
+          <text class="setting-desc">调整应用字体大小</text>
+        </view>
+        <view class="setting-value">
+          <picker mode="selector" range="{{fontSizeOptions}}" range-key="label" value="{{selectedFontSizeIndex}}" bindchange="onFontSizeChange">
+            <text class="value-text">{{fontSizeOptions[selectedFontSizeIndex].label}}</text>
+          </picker>
+        </view>
+      </view>
+      <view class="setting-item">
+        <view class="setting-icon">🌐</view>
+        <view class="setting-content">
+          <text class="setting-title">语言设置</text>
+          <text class="setting-desc">选择应用显示语言</text>
+        </view>
+        <view class="setting-value">
+          <picker mode="selector" range="{{languageOptions}}" range-key="label" value="{{selectedLanguageIndex}}" bindchange="onLanguageChange">
+            <text class="value-text">{{languageOptions[selectedLanguageIndex].label}}</text>
+          </picker>
+        </view>
+      </view>
+      <view class="setting-item" bindtap="clearCache">
+        <view class="setting-icon">🗑️</view>
+        <view class="setting-content">
+          <text class="setting-title">清除缓存</text>
+          <text class="setting-desc">清理应用缓存数据</text>
+        </view>
+        <view class="setting-arrow">›</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 关于应用 -->
+  <view class="settings-section">
+    <view class="section-header">
+      <text class="section-title">关于应用</text>
+    </view>
+    <view class="settings-list">
+      <view class="setting-item" bindtap="viewAbout">
+        <view class="setting-icon">ℹ️</view>
+        <view class="setting-content">
+          <text class="setting-title">关于我们</text>
+          <text class="setting-desc">了解声乐评测应用</text>
+        </view>
+        <view class="setting-arrow">›</view>
+      </view>
+      <view class="setting-item" bindtap="viewHelp">
+        <view class="setting-icon">❓</view>
+        <view class="setting-content">
+          <text class="setting-title">帮助中心</text>
+          <text class="setting-desc">使用帮助和常见问题</text>
+        </view>
+        <view class="setting-arrow">›</view>
+      </view>
+      <view class="setting-item" bindtap="contactUs">
+        <view class="setting-icon">📞</view>
+        <view class="setting-content">
+          <text class="setting-title">联系我们</text>
+          <text class="setting-desc">反馈建议和问题报告</text>
+        </view>
+        <view class="setting-arrow">›</view>
+      </view>
+      <view class="setting-item" bindtap="checkUpdate">
+        <view class="setting-icon">🔄</view>
+        <view class="setting-content">
+          <text class="setting-title">检查更新</text>
+          <text class="setting-desc">当前版本：{{appVersion}}</text>
+        </view>
+        <view class="setting-arrow">›</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 账户操作 -->
+  <view class="settings-section">
+    <view class="section-header">
+      <text class="section-title">账户操作</text>
+    </view>
+    <view class="settings-list">
+      <view class="setting-item" bindtap="exportData">
+        <view class="setting-icon">📤</view>
+        <view class="setting-content">
+          <text class="setting-title">导出数据</text>
+          <text class="setting-desc">导出评测记录和个人数据</text>
+        </view>
+        <view class="setting-arrow">›</view>
+      </view>
+      <view class="setting-item" bindtap="resetSettings">
+        <view class="setting-icon">🔄</view>
+        <view class="setting-content">
+          <text class="setting-title">重置设置</text>
+          <text class="setting-desc">恢复所有设置为默认值</text>
+        </view>
+        <view class="setting-arrow">›</view>
+      </view>
+      <view class="setting-item danger" bindtap="logout">
+        <view class="setting-icon">🚪</view>
+        <view class="setting-content">
+          <text class="setting-title">退出登录</text>
+          <text class="setting-desc">退出当前账户</text>
+        </view>
+        <view class="setting-arrow">›</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部安全区域 -->
+  <view class="settings-footer">
+    <text class="footer-text">声乐评测 v{{appVersion}}</text>
+    <text class="footer-text">让声音更动听</text>
+  </view>
+</view>
+
+<!-- 提醒时间设置弹窗 -->
+<view class="time-picker-modal {{showTimePicker ? 'show' : ''}}" bindtap="closeTimePicker">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-header">
+      <text class="modal-title">设置提醒时间</text>
+      <text class="modal-close" bindtap="closeTimePicker">×</text>
+    </view>
+    <view class="modal-body">
+      <picker mode="time" value="{{tempReminderTime}}" bindchange="onTimeChange">
+        <view class="time-picker">
+          <text class="time-text">{{tempReminderTime}}</text>
+        </view>
+      </picker>
+    </view>
+    <view class="modal-actions">
+      <view class="modal-btn cancel" bindtap="closeTimePicker">取消</view>
+      <view class="modal-btn confirm" bindtap="confirmTime">确定</view>
+    </view>
+  </view>
+</view>
+

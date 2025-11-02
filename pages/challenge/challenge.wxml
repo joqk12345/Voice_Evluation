@@ -1,0 +1,183 @@
+<!--每日挑战页面-->
+<view class="challenge-container">
+  <!-- 背景装饰 -->
+  <view class="challenge-decoration">
+    <view class="decoration-circle circle-1"></view>
+    <view class="decoration-circle circle-2"></view>
+    <view class="decoration-circle circle-3"></view>
+    <view class="decoration-line line-1"></view>
+    <view class="decoration-line line-2"></view>
+  </view>
+
+  <!-- 页面头部 -->
+  <view class="challenge-header">
+    <view class="header-content">
+      <view class="header-title">
+        <text class="title-text">每日挑战</text>
+        <text class="title-subtitle">专业声乐训练</text>
+      </view>
+      <view class="header-stats">
+        <view class="stat-item">
+          <text class="stat-number">{{userStats.continuousDays}}</text>
+          <text class="stat-label">连续天数</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-number">{{userStats.totalChallenges}}</text>
+          <text class="stat-label">完成挑战</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 今日挑战卡片 -->
+  <view class="today-challenge-card">
+    <view class="card-header">
+      <view class="header-left">
+        <text class="card-title">今日挑战</text>
+        <text class="card-date">{{todayDate}}</text>
+      </view>
+      <view class="header-right">
+        <view class="progress-ring">
+          <view class="ring-bg"></view>
+          <view class="ring-progress" style="transform: rotate({{progressAngle}}deg);"></view>
+          <view class="ring-text">
+            <text class="progress-number">{{todayProgress}}/{{todayTotal}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 挑战任务列表 -->
+    <view class="challenge-tasks">
+      <view class="task-item" wx:for="{{todayChallenges}}" wx:key="id" bindtap="startChallenge" data-task="{{item}}">
+        <view class="task-icon {{item.completed ? 'completed' : ''}}">
+          <text class="icon-text">{{item.completed ? '✓' : item.icon}}</text>
+        </view>
+        <view class="task-content">
+          <view class="task-header">
+            <text class="task-title">{{item.title}}</text>
+            <view class="task-reward">
+              <text class="reward-text">+{{item.reward}}分</text>
+            </view>
+          </view>
+          <text class="task-desc">{{item.description}}</text>
+          <view class="task-progress">
+            <view class="progress-bar">
+              <view class="progress-fill" style="width: {{item.progress}}%;"></view>
+            </view>
+            <text class="progress-text">{{item.current}}/{{item.target}}</text>
+          </view>
+        </view>
+        <view class="task-action">
+          <text class="action-text">{{item.completed ? '已完成' : '开始'}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 挑战成就 -->
+  <view class="achievements-section">
+    <view class="section-header">
+      <text class="section-title">挑战成就</text>
+      <text class="section-more" bindtap="viewAllAchievements">查看全部</text>
+    </view>
+    <view class="achievements-grid">
+      <view class="achievement-item" wx:for="{{recentAchievements}}" wx:key="id">
+        <view class="achievement-icon {{item.unlocked ? 'unlocked' : 'locked'}}">
+          <text class="achievement-emoji">{{item.emoji}}</text>
+        </view>
+        <text class="achievement-name">{{item.name}}</text>
+        <text class="achievement-desc">{{item.description}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 排行榜 -->
+  <view class="leaderboard-section">
+    <view class="section-header">
+      <text class="section-title">本周排行</text>
+      <text class="section-more" bindtap="viewLeaderboard">查看全部</text>
+    </view>
+    <view class="leaderboard-list">
+      <view class="leaderboard-item" wx:for="{{leaderboard}}" wx:key="rank">
+        <view class="rank-badge rank-{{item.rank}}">
+          <text class="rank-number">{{item.rank}}</text>
+        </view>
+        <view class="user-info">
+          <image class="user-avatar" src="{{item.avatar}}" mode="aspectFill"></image>
+          <view class="user-details">
+            <text class="user-name">{{item.name}}</text>
+            <text class="user-score">{{item.score}}分</text>
+          </view>
+        </view>
+        <view class="user-stats">
+          <text class="stats-text">{{item.challenges}}个挑战</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 挑战历史 -->
+  <view class="history-section">
+    <view class="section-header">
+      <text class="section-title">挑战历史</text>
+      <text class="section-more" bindtap="viewHistory">查看全部</text>
+    </view>
+    <view class="history-calendar">
+      <view class="calendar-header">
+        <text class="calendar-title">{{currentMonth}}</text>
+        <view class="calendar-nav">
+          <text class="nav-btn" bindtap="prevMonth">‹</text>
+          <text class="nav-btn" bindtap="nextMonth">›</text>
+        </view>
+      </view>
+      <view class="calendar-grid">
+        <view class="calendar-day {{item.hasChallenge ? 'has-challenge' : ''}} {{item.completed ? 'completed' : ''}}" 
+              wx:for="{{calendarDays}}" wx:key="date" bindtap="viewDayDetail" data-date="{{item.date}}">
+          <text class="day-number">{{item.day}}</text>
+          <view class="day-status" wx:if="{{item.hasChallenge}}">
+            <text class="status-dot {{item.completed ? 'completed' : 'pending'}}"></text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部操作按钮 -->
+  <view class="challenge-actions">
+    <view class="action-btn primary" bindtap="startTodayChallenge">
+      <text class="btn-icon">🎯</text>
+      <text class="btn-text">开始今日挑战</text>
+    </view>
+    <view class="action-btn secondary" bindtap="viewRecommendations">
+      <text class="btn-icon">💡</text>
+      <text class="btn-text">获取建议</text>
+    </view>
+  </view>
+</view>
+
+<!-- 挑战详情弹窗 -->
+<view class="challenge-modal {{showModal ? 'show' : ''}}" bindtap="closeModal">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-header">
+      <text class="modal-title">{{selectedTask.title}}</text>
+      <text class="modal-close" bindtap="closeModal">×</text>
+    </view>
+    <view class="modal-body">
+      <text class="modal-desc">{{selectedTask.description}}</text>
+      <view class="modal-reward">
+        <text class="reward-label">奖励：</text>
+        <text class="reward-value">+{{selectedTask.reward}}分</text>
+      </view>
+      <view class="modal-tips">
+        <text class="tips-title">挑战提示：</text>
+        <text class="tips-content">{{selectedTask.tips}}</text>
+      </view>
+    </view>
+    <view class="modal-actions">
+      <view class="modal-btn cancel" bindtap="closeModal">取消</view>
+      <view class="modal-btn confirm" bindtap="confirmChallenge">开始挑战</view>
+    </view>
+  </view>
+</view>
+

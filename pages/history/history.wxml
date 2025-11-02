@@ -1,0 +1,146 @@
+<!--pages/history/history.wxml - 专业音频分析风格-->
+
+<view class="history-container">
+  <!-- 数据图表装饰 -->
+  <view class="data-chart-decoration">
+    <view class="chart-bar"></view>
+    <view class="chart-bar"></view>
+    <view class="chart-bar"></view>
+    <view class="chart-bar"></view>
+    <view class="chart-bar"></view>
+    <view class="chart-bar"></view>
+  </view>
+
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <text class="page-title">评测记录</text>
+    <text class="page-subtitle">共{{historyList.length}}条记录</text>
+  </view>
+
+  <!-- 统计概览 -->
+  <view class="stats-overview">
+    <view class="stats-grid">
+      <view class="stat-item">
+        <text class="stat-number">{{totalRecords}}</text>
+        <text class="stat-label">总评测次数</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-number">{{averageScore}}</text>
+        <text class="stat-label">平均分数</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 筛选器 -->
+  <view class="filter-section">
+    <view class="filter-tabs">
+      <view class="filter-tab {{currentFilter === 'all' ? 'active' : ''}}" bindtap="switchFilter" data-filter="all">
+        全部
+      </view>
+      <view class="filter-tab {{currentFilter === 'recent' ? 'active' : ''}}" bindtap="switchFilter" data-filter="recent">
+        最近
+      </view>
+      <view class="filter-tab {{currentFilter === 'high' ? 'active' : ''}}" bindtap="switchFilter" data-filter="high">
+        高分
+      </view>
+    </view>
+  </view>
+
+  <!-- 历史记录列表 -->
+  <view class="history-section">
+    <view class="history-list" wx:if="{{historyList.length > 0}}">
+      <view class="history-item" wx:for="{{historyList}}" wx:key="id">
+        <!-- 记录头部 -->
+        <view class="record-header">
+          <view class="record-info">
+            <view class="record-title">
+              <text class="song-name">{{item.song}}</text>
+              <text class="record-date">{{item.date}}</text>
+            </view>
+            <view class="record-score">
+              <text class="score-number">{{item.overallScore}}</text>
+              <text class="score-label">分</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 详细指标 -->
+        <view class="metrics-grid">
+          <view class="metric-item">
+            <text class="metric-label">音准</text>
+            <text class="metric-value">{{item.pitch}}</text>
+          </view>
+          <view class="metric-item">
+            <text class="metric-label">节奏</text>
+            <text class="metric-value">{{item.rhythm}}</text>
+          </view>
+          <view class="metric-item">
+            <text class="metric-label">音量</text>
+            <text class="metric-value">{{item.volume}}</text>
+          </view>
+          <view class="metric-item">
+            <text class="metric-label">音色</text>
+            <text class="metric-value">{{item.timbre}}</text>
+          </view>
+        </view>
+
+        <!-- 记录底部 -->
+        <view class="record-footer">
+          <view class="record-meta">
+            <text class="duration">时长: {{item.duration}}</text>
+          </view>
+          <view class="record-actions">
+            <view class="action-control" bindtap="shareRecord" data-id="{{item.id}}">
+              <view class="control-dots">⋯</view>
+              <view class="control-record">●</view>
+            </view>
+            <view class="action-control danger" bindtap="deleteRecord" data-id="{{item.id}}">
+              <view class="control-dots">⋯</view>
+              <view class="control-record">●</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:else>
+      <view class="empty-icon">📊</view>
+      <text class="empty-title">暂无评测记录</text>
+      <text class="empty-desc">开始您的第一次声乐评测吧</text>
+      <button class="empty-action" bindtap="goToRecord">开始评测</button>
+    </view>
+  </view>
+
+  <!-- 进步趋势 -->
+  <view class="progress-section" wx:if="{{historyList.length > 1}}">
+    <view class="progress-card">
+      <view class="progress-header">
+        <text class="progress-title">进步趋势</text>
+        <text class="progress-subtitle">分数时间</text>
+      </view>
+      
+      <view class="progress-chart">
+        <view class="chart-container">
+          <view class="chart-bar" wx:for="{{trendData}}" wx:key="index" style="height: {{item.height}}rpx;">
+            <view class="bar-value">{{item.score}}</view>
+          </view>
+        </view>
+        <view class="chart-labels">
+          <text class="chart-label" wx:for="{{trendData}}" wx:key="index">{{item.date}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 分页 -->
+  <view class="pagination" wx:if="{{totalPages > 1}}">
+    <view class="page-btn {{currentPage === 1 ? 'disabled' : ''}}" bindtap="prevPage">
+      <text>‹</text>
+    </view>
+    <view class="page-btn active">{{currentPage}}</view>
+    <view class="page-btn {{currentPage === totalPages ? 'disabled' : ''}}" bindtap="nextPage">
+      <text>›</text>
+    </view>
+  </view>
+</view>

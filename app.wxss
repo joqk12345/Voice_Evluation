@@ -1,0 +1,483 @@
+/* app.wxss - 专业音频分析风格 */
+
+/* 全局重置 */
+view, text, image, button, input, textarea, picker, scroll-view, swiper, swiper-item {
+  box-sizing: border-box;
+}
+
+/* 专业音频分析配色方案 */
+page {
+  /* 主色调 - 深蓝科技感 */
+  --primary-color: #1E3A8A;
+  --primary-light: #3B82F6;
+  --primary-dark: #1E40AF;
+  
+  /* 辅助色 - 音频波形绿 */
+  --accent-color: #10B981;
+  --accent-light: #34D399;
+  --accent-dark: #059669;
+  
+  /* 中性色 - 专业灰调 */
+  --neutral-900: #111827;
+  --neutral-800: #1F2937;
+  --neutral-700: #374151;
+  --neutral-600: #4B5563;
+  --neutral-500: #6B7280;
+  --neutral-400: #9CA3AF;
+  --neutral-300: #D1D5DB;
+  --neutral-200: #E5E7EB;
+  --neutral-100: #F3F4F6;
+  --neutral-50: #F9FAFB;
+  
+  /* 功能色 */
+  --success: #10B981;
+  --warning: #F59E0B;
+  --error: #EF4444;
+  --info: #3B82F6;
+  
+  /* 背景色 */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F8FAFC;
+  --bg-tertiary: #F1F5F9;
+  
+  /* 文字色 */
+  --text-primary: #111827;
+  --text-secondary: #374151;
+  --text-tertiary: #6B7280;
+  --text-quaternary: #9CA3AF;
+  
+  /* 阴影 */
+  --shadow-sm: 0 1rpx 2rpx 0 rgba(0, 0, 0, 0.05);
+  --shadow: 0 1rpx 3rpx 0 rgba(0, 0, 0, 0.1), 0 1rpx 2rpx 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4rpx 6rpx -1rpx rgba(0, 0, 0, 0.1), 0 2rpx 4rpx -1rpx rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10rpx 15rpx -3rpx rgba(0, 0, 0, 0.1), 0 4rpx 6rpx -2rpx rgba(0, 0, 0, 0.05);
+  
+  /* 边框 */
+  --border-color: #E5E7EB;
+  --border-radius: 8rpx;
+  --border-radius-md: 12rpx;
+  --border-radius-lg: 16rpx;
+}
+
+/* 基础样式 */
+page {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.5;
+  font-size: 28rpx;
+}
+
+/* 专业卡片组件 */
+.card {
+  background: var(--bg-primary);
+  border-radius: var(--border-radius-lg);
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: var(--shadow);
+  border: 1rpx solid var(--border-color);
+}
+
+.card-compact {
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+}
+
+/* 专业按钮组件 */
+.btn {
+  border-radius: var(--border-radius-md);
+  font-size: 28rpx;
+  font-weight: 500;
+  border: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80rpx;
+  padding: 0 24rpx;
+}
+
+.btn-primary {
+  background: var(--primary-color);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:active {
+  background: var(--primary-dark);
+  box-shadow: var(--shadow);
+  transform: scale(0.98);
+}
+
+.btn-secondary {
+  background: var(--accent-color);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary:active {
+  background: var(--accent-dark);
+  box-shadow: var(--shadow);
+  transform: scale(0.98);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--primary-color);
+  border: 2rpx solid var(--primary-color);
+}
+
+.btn-outline:active {
+  background: var(--primary-color);
+  color: white;
+  transform: scale(0.98);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1rpx solid var(--border-color);
+}
+
+.btn-ghost:active {
+  background: var(--neutral-50);
+  transform: scale(0.98);
+}
+
+/* 专业文本样式 */
+.title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 24rpx;
+  letter-spacing: -0.5rpx;
+}
+
+.subtitle {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16rpx;
+  letter-spacing: -0.25rpx;
+}
+
+.text {
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.text-muted {
+  font-size: 24rpx;
+  color: var(--text-tertiary);
+  line-height: 1.5;
+}
+
+.text-small {
+  font-size: 22rpx;
+  color: var(--text-quaternary);
+  line-height: 1.4;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-primary {
+  color: var(--primary-color);
+}
+
+.text-accent {
+  color: var(--accent-color);
+}
+
+/* 专业布局 */
+.container {
+  padding: 24rpx;
+  min-height: 100vh;
+  background: var(--bg-secondary);
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+/* 专业间距系统 */
+.mt-4 { margin-top: 8rpx; }
+.mt-6 { margin-top: 12rpx; }
+.mt-8 { margin-top: 16rpx; }
+.mt-12 { margin-top: 24rpx; }
+.mt-16 { margin-top: 32rpx; }
+.mt-20 { margin-top: 40rpx; }
+
+.mb-4 { margin-bottom: 8rpx; }
+.mb-6 { margin-bottom: 12rpx; }
+.mb-8 { margin-bottom: 16rpx; }
+.mb-12 { margin-bottom: 24rpx; }
+.mb-16 { margin-bottom: 32rpx; }
+.mb-20 { margin-bottom: 40rpx; }
+
+.p-4 { padding: 8rpx; }
+.p-6 { padding: 12rpx; }
+.p-8 { padding: 16rpx; }
+.p-12 { padding: 24rpx; }
+.p-16 { padding: 32rpx; }
+.p-20 { padding: 40rpx; }
+
+/* 音频分析专用组件 */
+.audio-visualizer {
+  background: var(--neutral-900);
+  border-radius: var(--border-radius-md);
+  padding: 24rpx;
+  margin: 16rpx 0;
+}
+
+.frequency-bar {
+  background: var(--accent-color);
+  border-radius: 2rpx;
+  transition: height 0.1s ease;
+}
+
+.waveform {
+  background: var(--neutral-800);
+  border-radius: var(--border-radius);
+  padding: 16rpx;
+  margin: 12rpx 0;
+}
+
+.spectrum-analyzer {
+  background: linear-gradient(135deg, var(--neutral-900) 0%, var(--neutral-800) 100%);
+  border-radius: var(--border-radius-lg);
+  padding: 24rpx;
+  color: white;
+}
+
+/* 专业评分显示 */
+.score-display {
+  font-size: 72rpx;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-align: center;
+  letter-spacing: -2rpx;
+}
+
+.score-label {
+  font-size: 24rpx;
+  color: var(--text-tertiary);
+  text-align: center;
+  margin-top: 8rpx;
+  font-weight: 500;
+}
+
+/* 专业评测指标 */
+.metric-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.metric-item:last-child {
+  border-bottom: none;
+}
+
+.metric-name {
+  font-size: 28rpx;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.metric-score {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--accent-color);
+}
+
+/* 专业录音按钮 */
+.record-btn {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  background: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 32rpx auto;
+  box-shadow: var(--shadow-lg);
+  transition: all 0.3s ease;
+}
+
+.record-btn:active {
+  transform: scale(0.95);
+  box-shadow: var(--shadow-md);
+}
+
+.record-btn.recording {
+  background: var(--error);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* 专业进度条 */
+.progress-bar {
+  width: 100%;
+  height: 8rpx;
+  background: var(--neutral-200);
+  border-radius: 4rpx;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent-color);
+  border-radius: 4rpx;
+  transition: width 0.3s ease;
+}
+
+/* 专业头像 */
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  border: 3rpx solid var(--border-color);
+}
+
+.avatar-large {
+  width: 200rpx;
+  height: 200rpx;
+}
+
+/* 专业加载动画 */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx;
+}
+
+.loading-text {
+  margin-left: 20rpx;
+  color: var(--text-tertiary);
+  font-size: 28rpx;
+}
+
+/* 专业空状态 */
+.empty-state {
+  text-align: center;
+  padding: 80rpx 40rpx;
+  color: var(--text-tertiary);
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 20rpx;
+  opacity: 0.5;
+}
+
+/* 专业分享按钮 */
+.share-btn {
+  position: fixed;
+  bottom: 40rpx;
+  right: 40rpx;
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  background: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.share-btn:active {
+  transform: scale(0.95);
+  box-shadow: var(--shadow-md);
+}
+
+/* 专业标签 */
+.tag {
+  display: inline-block;
+  padding: 8rpx 16rpx;
+  background: var(--neutral-100);
+  color: var(--text-secondary);
+  border-radius: var(--border-radius);
+  font-size: 22rpx;
+  font-weight: 500;
+  margin: 4rpx;
+}
+
+.tag-primary {
+  background: var(--primary-color);
+  color: white;
+}
+
+.tag-accent {
+  background: var(--accent-color);
+  color: white;
+}
+
+/* 专业分割线 */
+.divider {
+  height: 1rpx;
+  background: var(--border-color);
+  margin: 24rpx 0;
+}
+
+/* 专业状态指示器 */
+.status-indicator {
+  display: inline-block;
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  margin-right: 8rpx;
+}
+
+.status-success {
+  background: var(--success);
+}
+
+.status-warning {
+  background: var(--warning);
+}
+
+.status-error {
+  background: var(--error);
+}
+
+.status-info {
+  background: var(--info);
+}

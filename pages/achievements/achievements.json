@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "成就徽章",
+  "navigationBarBackgroundColor": "#1E3A8A",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#F8FAFC",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark"
+}
+

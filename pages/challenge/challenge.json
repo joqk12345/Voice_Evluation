@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "每日挑战",
+  "navigationBarBackgroundColor": "#1E3A8A",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#F8FAFC",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark"
+}
+
