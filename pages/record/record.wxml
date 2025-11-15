@@ -1,162 +1,157 @@
-<!--pages/record/record.wxml - 专业音频分析风格-->
-
+<!--pages/record/record.wxml - 简洁温暖风格，与首页统一-->
 <view class="record-container">
-  <!-- 音频波形装饰 -->
-  <view class="audio-wave-decoration">
-    <view class="wave-line"></view>
-    <view class="wave-line"></view>
-    <view class="wave-line"></view>
-    <view class="wave-line"></view>
-    <view class="wave-line"></view>
-    <view class="wave-line"></view>
-    <view class="wave-line"></view>
-    <view class="wave-line"></view>
+  <!-- 情绪化提示 -->
+  <view class="welcome-tip">
+    <text class="tip-text">放松心情，唱出你的声音 🎵</text>
   </view>
 
-  <!-- 页面标题 -->
-  <view class="page-header">
-    <text class="page-title">声乐评测</text>
-    <text class="page-subtitle">专业音频分析工具</text>
-  </view>
-
-  <!-- 录音状态指示器 -->
-  <view class="record-status">
-    <view class="status-indicator {{isRecording ? 'recording' : ''}}">
-      <view class="status-dot"></view>
-      <text class="status-text">{{isRecording ? '录音中...' : '准备录音'}}</text>
-    </view>
-  </view>
-
-  <!-- 主要录音区域 -->
+  <!-- 录音核心区域 -->
   <view class="record-main">
-    <!-- 录音控制卡片 -->
-    <view class="record-control-card">
-      <view class="control-header">
+    <!-- 大录音按钮 -->
+    <view class="record-button-wrapper">
         <view class="record-button {{isRecording ? 'recording' : ''}}" bindtap="toggleRecord">
-          <view class="record-icon">🎤</view>
+        <!-- 背景光晕效果 -->
+        <view class="record-glow" wx:if="{{!isRecording}}"></view>
+        <!-- 录音时的声波效果 -->
+        <view class="sound-waves" wx:if="{{isRecording}}">
+          <view class="wave wave-1"></view>
+          <view class="wave wave-2"></view>
+          <view class="wave wave-3"></view>
         </view>
-        
-        <view class="record-info">
-          <view class="info-section">
-            <text class="section-label">准备录音</text>
-            <view class="info-details">
-              <view class="info-row">
-                <text class="info-label">录音时长</text>
-                <text class="info-value">{{formatTime(recordTime)}}</text>
-              </view>
-              <view class="info-row">
-                <text class="info-label">设置时长</text>
-                <text class="info-value">{{durationOptions[selectedDurationIndex].label}}</text>
-              </view>
-            </view>
+        <!-- 话筒图标 -->
+        <view class="record-icon-wrapper">
+          <view class="record-icon">{{isRecording ? '🎙️' : '🎙️'}}</view>
+          <view class="icon-sparkles" wx:if="{{!isRecording}}">
+            <text class="sparkle sparkle-1">✨</text>
+            <text class="sparkle sparkle-2">✨</text>
+            <text class="sparkle sparkle-3">✨</text>
           </view>
         </view>
+        <view class="record-status-text">{{isRecording ? '录音中...' : '点击开始'}}</view>
       </view>
     </view>
 
-    <!-- 录音提示卡片 -->
-    <view class="instruction-card">
-      <view class="instruction-icon">💡</view>
-      <text class="instruction-text">请选择一个安静的环境，准备开始录音</text>
+    <!-- 倒计时显示 -->
+    <view class="countdown-display" wx:if="{{isRecording}}">
+      <text class="countdown-number">{{countdown}}</text>
+      <text class="countdown-label">秒</text>
     </view>
 
-    <!-- 评测设置卡片 -->
-    <view class="settings-card">
-      <view class="settings-header">
-        <text class="settings-title">评测设置</text>
+    <!-- 录音时间显示 -->
+    <view class="time-display" wx:if="{{!isRecording && hasRecorded}}">
+      <text class="time-text">{{formatTime(recordTime)}}</text>
+      <text class="time-label">录音时长</text>
       </view>
       
-      <view class="settings-content">
+    <!-- 简单设置 -->
+    <view class="simple-settings" wx:if="{{!isRecording && !hasRecorded}}">
         <view class="setting-item">
-          <view class="setting-label">
-            <text class="label-text">录音时长</text>
-            <text class="label-desc">选择录音时长</text>
-          </view>
+        <text class="setting-label">录音时长</text>
           <picker 
             range="{{durationOptions}}" 
             range-key="label"
             value="{{selectedDurationIndex}}"
             bindchange="onDurationChange"
           >
-            <view class="setting-value">
-              <text class="value-text">{{durationOptions[selectedDurationIndex].label}}</text>
-              <text class="arrow-icon">></text>
+          <view class="setting-picker">
+            <text class="picker-text">{{durationOptions[selectedDurationIndex].label}}</text>
+            <text class="picker-arrow">⌄</text>
             </view>
           </picker>
         </view>
 
-        <view class="setting-divider"></view>
+      <!-- 高级设置按钮（Apple 风格） -->
+      <view class="advanced-settings-btn" bindtap="toggleAdvancedSettings">
+        <text class="advanced-btn-text">高级设置</text>
+        <text class="advanced-btn-icon {{showAdvancedSettings ? 'expanded' : ''}}">⌄</text>
+      </view>
 
-        <view class="setting-item">
-          <view class="setting-label">
-            <text class="label-text">评测类型</text>
-            <text class="label-desc">选择评测类型</text>
-          </view>
-          <picker 
-            range="{{testTypes}}" 
-            range-key="name"
-            value="{{selectedTestTypeIndex}}"
-            bindchange="onTestTypeChange"
+      <!-- 高级功能按钮组（折叠） -->
+      <view class="advanced-features {{showAdvancedSettings ? 'show' : ''}}" wx:if="{{showAdvancedSettings}}">
+        <view class="feature-buttons">
+          <view 
+            class="feature-btn {{enableVoiceDetection ? 'active' : ''}}" 
+            bindtap="toggleVoiceDetection"
           >
-            <view class="setting-value">
-              <text class="value-text">{{testTypes[selectedTestTypeIndex].name}}</text>
-              <text class="arrow-icon">></text>
+            <text class="feature-icon">🎤</text>
+            <text class="feature-label">人声检测</text>
+          </view>
+          
+          <view 
+            class="feature-btn {{enableMelodyDetection ? 'active' : ''}}" 
+            bindtap="toggleMelodyDetection"
+          >
+            <text class="feature-icon">🎵</text>
+            <text class="feature-label">旋律检测</text>
+          </view>
+          
+          <view 
+            class="feature-btn {{enableWaveform ? 'active' : ''}}" 
+            bindtap="toggleWaveform"
+          >
+            <text class="feature-icon">📊</text>
+            <text class="feature-label">波形</text>
             </view>
-          </picker>
         </view>
       </view>
     </view>
+
+    <!-- 波形可视化区域（参考 tobiplayer 设计） -->
+    <view class="waveform-container" wx:if="{{enableWaveform && (isRecording || hasRecorded)}}">
+      <view class="waveform-header">
+        <text class="waveform-title">波形与音高</text>
+        <text class="waveform-pitch" wx:if="{{currentPitch > 0}}">{{currentPitchText}} Hz</text>
   </view>
 
-  <!-- 底部操作区域 -->
+      <canvas 
+        id="waveformCanvas"
+        type="2d"
+        class="waveform-canvas"
+        style="width: 100%; height: 500rpx;"
+      ></canvas>
+    </view>
+
+    <!-- 录音完成提示 -->
+    <view class="completion-hint" wx:if="{{recordCompleted}}">
+      <text class="hint-icon">✅</text>
+      <text class="hint-text">录音完成！可以开始分析了</text>
+    </view>
+  </view>
+
+  <!-- 底部操作按钮 -->
   <view class="action-section">
-    <view class="action-buttons">
-      <button class="btn btn-outline" bindtap="playDemo" wx:if="{{!hasRecorded}}">
-        <view class="btn-icon">♫</view>
-        <text class="btn-text">试听示例</text>
-      </button>
-      
-      <button class="btn btn-primary" bindtap="startRecord" wx:if="{{!hasRecorded}}">
-        <view class="btn-icon">🎤</view>
-        <text class="btn-text">开始录音</text>
-      </button>
+    <button 
+      class="action-btn primary" 
+      bindtap="analyzeRecord"
+      wx:if="{{recordCompleted}}"
+      disabled="{{isAnalyzing}}"
+    >
+      {{isAnalyzing ? '分析中...' : '开始分析'}}
+    </button>
 
-      <view class="recorded-actions" wx:if="{{hasRecorded}}">
-        <button class="btn btn-outline" bindtap="playRecord">
-          <view class="btn-icon">▶️</view>
-          <text class="btn-text">播放录音</text>
-        </button>
-        
-        <button class="btn btn-primary" bindtap="analyzeRecord">
-          <view class="btn-icon">📊</view>
-          <text class="btn-text">开始分析</text>
-        </button>
-      </view>
-    </view>
-  </view>
-
-  <!-- 录音完成后的操作 -->
-  <view class="completed-actions" wx:if="{{recordCompleted}}">
-    <view class="completion-card">
-      <view class="completion-icon">✅</view>
-      <view class="completion-content">
-        <text class="completion-title">录音完成！</text>
-        <text class="completion-desc">点击下方按钮开始分析您的声乐表现</text>
-      </view>
-    </view>
+    <button 
+      class="action-btn primary" 
+      bindtap="startRecord"
+      wx:if="{{!hasRecorded && !isRecording}}"
+    >
+      开始录音
+    </button>
     
-    <button class="btn btn-secondary btn-large" bindtap="analyzeRecord">
-      <view class="btn-icon">📊</view>
-      <text class="btn-text">开始分析</text>
+    <button 
+      class="action-btn secondary" 
+      bindtap="stopRecord"
+      wx:if="{{isRecording}}"
+    >
+      停止录音
     </button>
   </view>
 
-  <!-- 加载状态 -->
+  <!-- 加载遮罩 -->
   <view class="loading-overlay" wx:if="{{isAnalyzing}}">
     <view class="loading-content">
       <view class="loading-spinner"></view>
-      <text class="loading-text">正在分析您的录音...</text>
-      <text class="loading-desc">请稍候，这可能需要几秒钟</text>
+      <text class="loading-text">正在分析你的声音...</text>
+      <text class="loading-desc">请稍候片刻</text>
     </view>
   </view>
 </view>

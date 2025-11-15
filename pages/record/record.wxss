@@ -1,621 +1,610 @@
-/* pages/record/record.wxss - 专业音频分析风格 */
+/* pages/record/record.wxss - 简洁温暖风格，与首页统一 */
 
 .record-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
-  padding: 24rpx;
+  background: linear-gradient(180deg, #fef7ed 0%, #ffffff 40%);
+  padding: 40rpx 24rpx;
+  padding-bottom: 120rpx;
   display: flex;
   flex-direction: column;
-  position: relative;
-  overflow: hidden;
-}
-
-/* 背景装饰元素 */
-.record-container::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -20%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(30, 58, 138, 0.03) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.record-container::after {
-  content: '';
-  position: absolute;
-  bottom: -30%;
-  left: -30%;
-  width: 150%;
-  height: 150%;
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.05) 0%, transparent 60%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* 音频波形装饰 */
-.audio-wave-decoration {
-  position: absolute;
-  top: 20%;
-  right: 5%;
-  width: 100rpx;
-  height: 200rpx;
-  opacity: 0.1;
-  z-index: 0;
-}
-
-.wave-line {
-  position: absolute;
-  width: 4rpx;
-  background: var(--primary-color);
-  border-radius: 2rpx;
-  animation: waveAnimation 2s ease-in-out infinite;
-}
-
-.wave-line:nth-child(1) { height: 20rpx; top: 0; left: 0; animation-delay: 0s; }
-.wave-line:nth-child(2) { height: 40rpx; top: 10rpx; left: 12rpx; animation-delay: 0.2s; }
-.wave-line:nth-child(3) { height: 60rpx; top: 5rpx; left: 24rpx; animation-delay: 0.4s; }
-.wave-line:nth-child(4) { height: 30rpx; top: 15rpx; left: 36rpx; animation-delay: 0.6s; }
-.wave-line:nth-child(5) { height: 50rpx; top: 8rpx; left: 48rpx; animation-delay: 0.8s; }
-.wave-line:nth-child(6) { height: 25rpx; top: 12rpx; left: 60rpx; animation-delay: 1s; }
-.wave-line:nth-child(7) { height: 45rpx; top: 6rpx; left: 72rpx; animation-delay: 1.2s; }
-.wave-line:nth-child(8) { height: 35rpx; top: 10rpx; left: 84rpx; animation-delay: 1.4s; }
-
-@keyframes waveAnimation {
-  0%, 100% { transform: scaleY(1); }
-  50% { transform: scaleY(1.5); }
-}
-
-/* 确保内容在装饰元素之上 */
-.page-header,
-.record-status,
-.record-main,
-.action-section {
-  position: relative;
-  z-index: 1;
-}
-
-/* 页面标题 */
-.page-header {
-  text-align: center;
-  margin-bottom: 32rpx;
-  padding: 24rpx 0;
-}
-
-.page-title {
-  display: block;
-  font-size: 32rpx;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 8rpx;
-  letter-spacing: -0.25rpx;
-}
-
-.page-subtitle {
-  display: block;
-  font-size: 22rpx;
-  color: var(--text-tertiary);
-  font-weight: 400;
-}
-
-/* 专业状态指示器 */
-.record-status {
-  margin-bottom: 32rpx;
-  width: 100%;
-  max-width: 600rpx;
-  align-self: center;
-}
-
-.status-indicator {
-  display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 20rpx 32rpx;
-  background: var(--bg-primary);
-  border-radius: var(--border-radius-lg);
-  border: 1rpx solid var(--border-color);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(10rpx);
-  transition: all 0.3s ease;
 }
 
-.status-indicator.recording {
-  background: var(--error);
-  color: white;
-  border-color: var(--error);
-  animation: pulse 2s infinite;
+/* 情绪化提示 */
+.welcome-tip {
+  margin-bottom: 60rpx;
+  text-align: center;
 }
 
-.status-dot {
-  width: 16rpx;
-  height: 16rpx;
-  border-radius: 50%;
-  background: var(--accent-color);
-  margin-right: 16rpx;
+.tip-text {
+  font-size: 28rpx;
+  color: #6b7280;
+  font-weight: 400;
+  line-height: 1.5;
 }
 
-.status-indicator.recording .status-dot {
-  background: white;
-  animation: blink 1s infinite;
-}
-
-@keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0.3; }
-}
-
-.status-text {
-  font-size: 26rpx;
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.status-indicator.recording .status-text {
-  color: white;
-}
-
-/* 专业录音主区域 */
+/* 录音核心区域 */
 .record-main {
   flex: 1;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 600rpx;
-  margin-bottom: 32rpx;
-  align-self: center;
-}
-
-/* 录音控制卡片 */
-.record-control-card {
-  background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(248, 250, 252, 0.8) 100%);
-  border-radius: var(--border-radius-lg);
-  padding: 32rpx;
-  margin-bottom: 24rpx;
-  border: 1rpx solid var(--border-color);
-  box-shadow: var(--shadow-lg);
-  backdrop-filter: blur(10rpx);
-  position: relative;
-  overflow: hidden;
-}
-
-.record-control-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3rpx;
-  background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--primary-color));
-  opacity: 0.8;
-}
-
-.control-header {
-  display: flex;
-  align-items: center;
-  gap: 32rpx;
-}
-
-.record-button {
-  width: 140rpx;
-  height: 140rpx;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
-  display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--shadow-lg), 0 0 20rpx rgba(30, 58, 138, 0.3);
-  transition: all 0.3s ease;
-  border: 3rpx solid var(--primary-light);
+  width: 100%;
+  max-width: 600rpx;
+}
+
+/* 录音按钮包装 */
+.record-button-wrapper {
+  margin-bottom: 40rpx;
   position: relative;
-  overflow: hidden;
-  flex-shrink: 0;
+  overflow: visible;
 }
 
-.record-button::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-  animation: buttonShine 3s ease-in-out infinite;
-}
-
-@keyframes buttonShine {
-  0%, 100% { transform: rotate(0deg) scale(1); opacity: 0.3; }
-  50% { transform: rotate(180deg) scale(1.1); opacity: 0.1; }
+/* 大录音按钮 - 可爱动漫风格 */
+.record-button {
+  width: 240rpx;
+  height: 240rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff9a56 0%, #ffad70 50%, #ffb380 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12rpx 48rpx rgba(255, 154, 86, 0.35),
+              0 0 0 8rpx rgba(255, 154, 86, 0.1),
+              0 0 0 16rpx rgba(255, 154, 86, 0.05);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+  position: relative;
+  overflow: visible;
 }
 
 .record-button:active {
-  transform: scale(0.95);
-  box-shadow: var(--shadow-md);
+  transform: scale(0.92);
+  box-shadow: 0 8rpx 32rpx rgba(255, 154, 86, 0.4),
+              0 0 0 4rpx rgba(255, 154, 86, 0.15);
 }
 
 .record-button.recording {
-  background: var(--error);
-  border-color: #ff6666;
-  animation: pulse 1.5s infinite;
+  background: linear-gradient(135deg, #ef4444 0%, #ff6b6b 50%, #ff8787 100%);
+  animation: recordingPulse 1.2s ease-in-out infinite;
+  box-shadow: 0 12rpx 48rpx rgba(239, 68, 68, 0.45),
+              0 0 0 8rpx rgba(239, 68, 68, 0.2),
+              0 0 0 16rpx rgba(239, 68, 68, 0.1);
 }
 
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+@keyframes recordingPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+/* 背景光晕效果 */
+.record-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(circle, rgba(255, 154, 86, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: glowPulse 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+/* 话筒图标包装 */
+.record-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16rpx;
 }
 
 .record-icon {
-  font-size: 56rpx;
-  color: white;
+  font-size: 96rpx;
+  line-height: 1;
+  filter: drop-shadow(0 4rpx 8rpx rgba(0, 0, 0, 0.2));
+  animation: micFloat 3s ease-in-out infinite;
   position: relative;
-  z-index: 1;
+  z-index: 2;
+}
+
+@keyframes micFloat {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-8rpx) scale(1.05);
+  }
 }
 
 .record-button.recording .record-icon {
-  animation: blink 1s infinite;
+  animation: micRecord 0.8s ease-in-out infinite;
 }
 
-.record-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+@keyframes micRecord {
+  0%, 100% {
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-4rpx) scale(1.08) rotate(-3deg);
+  }
+  75% {
+    transform: translateY(-4rpx) scale(1.08) rotate(3deg);
+  }
 }
 
-.info-section {
-  display: flex;
-  flex-direction: column;
-  gap: 12rpx;
+/* 闪烁星星装饰 */
+.icon-sparkles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200rpx;
+  height: 200rpx;
+  pointer-events: none;
 }
 
-.section-label {
-  font-size: 24rpx;
+.sparkle {
+  position: absolute;
+  font-size: 32rpx;
+  opacity: 0;
+  animation: sparkleFloat 2s ease-in-out infinite;
+}
+
+.sparkle-1 {
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.sparkle-2 {
+  top: 15%;
+  right: 15%;
+  animation-delay: 0.6s;
+}
+
+.sparkle-3 {
+  bottom: 20%;
+  left: 50%;
+  animation-delay: 1.2s;
+}
+
+@keyframes sparkleFloat {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.5) translate(0, 0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1) translate(10rpx, -10rpx);
+}
+}
+
+/* 录音时的声波效果 */
+.sound-waves {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.wave {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 3rpx solid rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  animation: waveExpand 1.5s ease-out infinite;
+}
+
+.wave-1 {
+  width: 120%;
+  height: 120%;
+  animation-delay: 0s;
+}
+
+.wave-2 {
+  width: 150%;
+  height: 150%;
+  animation-delay: 0.5s;
+}
+
+.wave-3 {
+  width: 180%;
+  height: 180%;
+  animation-delay: 1s;
+}
+
+@keyframes waveExpand {
+  0% {
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+  }
+  100% {
+    width: 220%;
+    height: 220%;
+    opacity: 0;
+  }
+}
+
+.record-status-text {
+  font-size: 26rpx;
+  color: white;
   font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 8rpx;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.2);
+  letter-spacing: 1rpx;
+  position: relative;
+  z-index: 2;
 }
 
-.info-details {
-  display: flex;
-  flex-direction: column;
-  gap: 8rpx;
+/* 倒计时显示 */
+.countdown-display {
+  text-align: center;
+  margin-bottom: 40rpx;
+  padding: 32rpx;
+  background: white;
+  border-radius: 24rpx;
+  box-shadow: 0 4rpx 20rpx rgba(239, 68, 68, 0.15);
+  min-width: 200rpx;
 }
 
-.info-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.countdown-number {
+  display: inline-block;
+  font-size: 80rpx;
+  font-weight: 700;
+  color: #ef4444;
+  font-family: 'SF Mono', Monaco, monospace;
+  line-height: 1;
+  margin-right: 8rpx;
+  animation: countdownPulse 1s ease-in-out infinite;
 }
 
-.info-label {
-  font-size: 22rpx;
-  color: var(--text-tertiary);
+.countdown-label {
+  font-size: 32rpx;
+  color: #6b7280;
   font-weight: 500;
 }
 
-.info-value {
-  font-size: 26rpx;
-  font-weight: 600;
-  color: var(--text-primary);
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+@keyframes countdownPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
 }
 
-/* 录音提示卡片 */
-.instruction-card {
-  background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(248, 250, 252, 0.9) 100%);
-  border-radius: var(--border-radius-lg);
-  padding: 24rpx;
-  margin-bottom: 24rpx;
-  border: 1rpx solid var(--border-color);
-  box-shadow: var(--shadow-md);
-  backdrop-filter: blur(10rpx);
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  gap: 16rpx;
+/* 时间显示 */
+.time-display {
+  text-align: center;
+  margin-bottom: 40rpx;
 }
 
-.instruction-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2rpx;
-  background: linear-gradient(90deg, var(--accent-color), var(--primary-color), var(--accent-color));
-  opacity: 0.6;
+.time-text {
+  display: block;
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #ff9a56;
+  font-family: 'SF Mono', Monaco, monospace;
+  margin-bottom: 8rpx;
 }
 
-.instruction-icon {
-  font-size: 28rpx;
-  color: var(--accent-color);
-  flex-shrink: 0;
+.time-label {
+  display: block;
+  font-size: 22rpx;
+  color: #9ca3af;
+  font-weight: 400;
 }
 
-.instruction-text {
-  font-size: 24rpx;
-  color: var(--text-secondary);
-  line-height: 1.5;
-  flex: 1;
-}
-
-/* 评测设置卡片 */
-.settings-card {
-  background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(248, 250, 252, 0.9) 100%);
-  border-radius: var(--border-radius-lg);
-  border: 1rpx solid var(--border-color);
-  box-shadow: var(--shadow-md);
-  backdrop-filter: blur(10rpx);
-  position: relative;
-  overflow: hidden;
-}
-
-.settings-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2rpx;
-  background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--primary-color));
-  opacity: 0.6;
-}
-
-.settings-header {
-  padding: 24rpx 24rpx 16rpx;
-  border-bottom: 1rpx solid var(--border-color);
-}
-
-.settings-title {
-  font-size: 26rpx;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.settings-content {
-  padding: 16rpx 24rpx 24rpx;
+/* 简单设置 */
+.simple-settings {
+  width: 100%;
+  background: white;
+  border-radius: 20rpx;
+  padding: 32rpx;
+  margin-bottom: 40rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
 }
 
 .setting-item {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20rpx 0;
+  flex-direction: column;
+  gap: 16rpx;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #e5e7eb;
+}
+
+.setting-item:last-child {
+  border-bottom: none;
 }
 
 .setting-label {
-  flex: 1;
+  font-size: 28rpx;
+  color: #1f2937;
+  font-weight: 600;
 }
 
-.label-text {
-  display: block;
-  font-size: 24rpx;
+/* 高级设置按钮（Apple 风格） */
+.advanced-settings-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8rpx;
+  padding: 20rpx 28rpx;
+  margin-top: 16rpx;
+  background: #ffffff;
+  border: 0.5rpx solid rgba(0, 0, 0, 0.1);
+  border-radius: 10rpx;
+  box-shadow: 0 1rpx 3rpx rgba(0, 0, 0, 0.08),
+              inset 0 0.5rpx 0 rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.advanced-settings-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 100%);
+  pointer-events: none;
+}
+
+.advanced-settings-btn:active {
+  transform: scale(0.97);
+  background: #f5f5f7;
+  box-shadow: 0 0.5rpx 2rpx rgba(0, 0, 0, 0.06),
+              inset 0 0.5rpx 1rpx rgba(0, 0, 0, 0.05);
+}
+
+.advanced-btn-text {
+  font-size: 28rpx;
+  color: #1d1d1f;
   font-weight: 500;
-  color: var(--text-primary);
-  margin-bottom: 4rpx;
+  letter-spacing: -0.3rpx;
+  position: relative;
+  z-index: 1;
 }
 
-.label-desc {
-  display: block;
+.advanced-btn-icon {
   font-size: 20rpx;
-  color: var(--text-tertiary);
+  color: #86868b;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+  font-weight: 300;
 }
 
-.setting-value {
+.advanced-btn-icon.expanded {
+  transform: rotate(180deg);
+}
+
+/* 高级功能区域（折叠） */
+.advanced-features {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  padding: 0;
+}
+
+.advanced-features.show {
+  max-height: 300rpx;
+  padding: 12rpx 0;
+}
+
+/* 功能按钮组 */
+.feature-buttons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 16rpx;
+  padding: 0;
+  margin-top: 0;
+}
+
+.feature-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6rpx;
+  padding: 16rpx 12rpx;
+  background: #f9fafb;
+  border: 2rpx solid #e5e7eb;
+  border-radius: 12rpx;
+  transition: all 0.3s ease;
+  min-height: 90rpx;
+}
+
+.feature-btn:active {
+  transform: scale(0.95);
+}
+
+.feature-btn.active {
+  background: linear-gradient(135deg, #fff7ed 0%, #ffe4cc 100%);
+  border-color: #ff9a56;
+  box-shadow: 0 4rpx 12rpx rgba(255, 154, 86, 0.25);
+}
+
+.feature-icon {
+  font-size: 32rpx;
+  line-height: 1;
+}
+
+.feature-label {
+  font-size: 20rpx;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.feature-btn.active .feature-label {
+  color: #ff9a56;
+  font-weight: 600;
+}
+
+.setting-picker {
   display: flex;
   align-items: center;
   gap: 12rpx;
-  padding: 12rpx 16rpx;
-  background: var(--neutral-50);
-  border-radius: var(--border-radius);
-  border: 1rpx solid var(--border-color);
-  transition: all 0.2s ease;
+  padding: 12rpx 20rpx;
+  background: #f9fafb;
+  border-radius: 12rpx;
+  border: 1rpx solid #e5e7eb;
 }
 
-.setting-value:active {
-  background: var(--neutral-100);
-  transform: scale(0.98);
-}
-
-.value-text {
-  font-size: 22rpx;
-  color: var(--text-secondary);
+.picker-text {
+  font-size: 26rpx;
+  color: #1f2937;
   font-weight: 500;
 }
 
-.arrow-icon {
-  font-size: 18rpx;
-  color: var(--text-quaternary);
-  font-weight: bold;
+.picker-arrow {
+  font-size: 20rpx;
+  color: #9ca3af;
 }
 
-.setting-divider {
-  height: 1rpx;
-  background: var(--border-color);
-  margin: 8rpx 0;
+/* 波形可视化容器 */
+.waveform-container {
+  width: 100%;
+  margin-top: 40rpx;
+  margin-bottom: 40rpx;
+  padding: 32rpx;
+  background: white;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
+}
+
+.waveform-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.waveform-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.waveform-pitch {
+  font-size: 22rpx;
+  color: #4a90e2;
+  font-weight: 600;
+  background: rgba(74, 144, 226, 0.1);
+  padding: 6rpx 16rpx;
+  border-radius: 12rpx;
+}
+
+.waveform-canvas {
+  width: 100%;
+  height: 500rpx;
+  background: #f9fafb;
+  border-radius: 12rpx;
+  border: 1rpx solid #e5e7eb;
+}
+
+/* 完成提示 */
+.completion-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+  padding: 32rpx;
+  background: white;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
+  margin-bottom: 40rpx;
+}
+
+.hint-icon {
+  font-size: 48rpx;
+}
+
+.hint-text {
+  font-size: 26rpx;
+  color: #1f2937;
+  font-weight: 500;
 }
 
 /* 底部操作区域 */
 .action-section {
   width: 100%;
   max-width: 600rpx;
-  align-self: center;
+  margin-top: auto;
+  padding-top: 40rpx;
 }
 
-.action-buttons {
-  display: flex;
-  gap: 16rpx;
-  margin-bottom: 32rpx;
-}
-
-.action-buttons .btn {
-  flex: 1;
+.action-btn {
+  width: 100%;
   height: 88rpx;
-  border-radius: var(--border-radius-md);
-  font-size: 24rpx;
-  font-weight: 500;
+  border-radius: 20rpx;
+  font-size: 28rpx;
+  font-weight: 600;
   border: none;
-  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12rpx;
-  position: relative;
-  overflow: hidden;
+  transition: all 0.3s ease;
 }
 
-.action-buttons .btn-outline {
-  background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(248, 250, 252, 0.9) 100%);
-  color: var(--primary-color);
-  border: 2rpx solid var(--primary-color);
-  box-shadow: var(--shadow-sm);
-  backdrop-filter: blur(10rpx);
-}
-
-.action-buttons .btn-outline::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(30, 58, 138, 0.1), transparent);
-  transition: left 0.5s ease;
-}
-
-.action-buttons .btn-outline:active {
-  background: var(--primary-color);
+.action-btn.primary {
+  background: linear-gradient(135deg, #ff9a56, #ffad56);
   color: white;
+  box-shadow: 0 4rpx 20rpx rgba(255, 154, 86, 0.3);
+}
+
+.action-btn.primary:active {
   transform: scale(0.98);
+  box-shadow: 0 2rpx 12rpx rgba(255, 154, 86, 0.4);
 }
 
-.action-buttons .btn-outline:active::before {
-  left: 100%;
+.action-btn.secondary {
+  background: white;
+  color: #ef4444;
+  border: 2rpx solid #ef4444;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
 }
 
-.action-buttons .btn-primary {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
-  color: white;
-  box-shadow: var(--shadow-md), 0 0 15rpx rgba(30, 58, 138, 0.3);
-}
-
-.action-buttons .btn-primary::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s ease;
-}
-
-.action-buttons .btn-primary:active {
-  background: var(--primary-dark);
+.action-btn.secondary:active {
   transform: scale(0.98);
+  background: #fef2f2;
 }
 
-.action-buttons .btn-primary:active::before {
-  left: 100%;
-}
-
-.action-buttons .btn-secondary {
-  background: var(--accent-color);
-  color: white;
-  box-shadow: var(--shadow-sm);
-}
-
-.action-buttons .btn-secondary:active {
-  background: var(--accent-dark);
-  transform: scale(0.98);
-}
-
-.btn-icon {
-  font-size: 26rpx;
-  position: relative;
-  z-index: 1;
-}
-
-.btn-text {
-  font-size: 24rpx;
-  font-weight: 500;
-  position: relative;
-  z-index: 1;
-}
-
-.recorded-actions {
-  display: flex;
-  gap: 16rpx;
-  width: 100%;
-}
-
-.recorded-actions .btn {
-  flex: 1;
-}
-
-/* 录音完成后的操作 */
-.completed-actions {
-  width: 100%;
-  max-width: 600rpx;
-  align-self: center;
-}
-
-.completion-card {
-  background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(248, 250, 252, 0.9) 100%);
-  border-radius: var(--border-radius-lg);
-  padding: 32rpx;
-  margin-bottom: 24rpx;
-  border: 1rpx solid var(--border-color);
-  box-shadow: var(--shadow-md);
-  backdrop-filter: blur(10rpx);
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.completion-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2rpx;
-  background: linear-gradient(90deg, var(--accent-color), var(--primary-color), var(--accent-color));
+.action-btn[disabled] {
   opacity: 0.6;
 }
 
-.completion-icon {
-  font-size: 44rpx;
-  margin-bottom: 16rpx;
-}
-
-.completion-content {
-  display: flex;
-  flex-direction: column;
-  gap: 8rpx;
-}
-
-.completion-title {
-  font-size: 26rpx;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.completion-desc {
-  font-size: 22rpx;
-  color: var(--text-secondary);
-  line-height: 1.5;
-}
-
-.btn-large {
-  height: 96rpx;
-  font-size: 26rpx;
-}
-
-/* 专业加载状态 */
+/* 加载遮罩 */
 .loading-overlay {
   position: fixed;
   top: 0;
@@ -627,16 +616,15 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  backdrop-filter: blur(10rpx);
+  backdrop-filter: blur(4rpx);
 }
 
 .loading-content {
-  background: var(--bg-primary);
-  border-radius: var(--border-radius-lg);
-  padding: 48rpx;
+  background: white;
+  border-radius: 24rpx;
+  padding: 60rpx 40rpx;
   text-align: center;
-  box-shadow: var(--shadow-lg);
-  border: 1rpx solid var(--border-color);
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.15);
   max-width: 400rpx;
   margin: 0 32rpx;
 }
@@ -644,73 +632,33 @@
 .loading-spinner {
   width: 60rpx;
   height: 60rpx;
-  border: 4rpx solid var(--neutral-200);
-  border-top: 4rpx solid var(--primary-color);
+  border: 4rpx solid #f3f4f6;
+  border-top: 4rpx solid #ff9a56;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto 24rpx;
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .loading-text {
-  font-size: 24rpx;
-  color: var(--text-primary);
-  font-weight: 500;
-  margin-bottom: 8rpx;
   display: block;
+  font-size: 28rpx;
+  color: #1f2937;
+  font-weight: 600;
+  margin-bottom: 12rpx;
 }
 
 .loading-desc {
-  font-size: 20rpx;
-  color: var(--text-tertiary);
-  line-height: 1.5;
-}
-
-/* 响应式设计 */
-@media (max-width: 750rpx) {
-  .record-container {
-    padding: 16rpx;
+  display: block;
+  font-size: 24rpx;
+  color: #6b7280;
+  font-weight: 400;
   }
-  
-  .record-button {
-    width: 120rpx;
-    height: 120rpx;
-  }
-  
-  .record-icon {
-    font-size: 48rpx;
-  }
-  
-  .control-header {
-    gap: 24rpx;
-  }
-  
-  .section-label {
-    font-size: 22rpx;
-  }
-  
-  .info-section {
-    gap: 10rpx;
-  }
-  
-  .info-details {
-    gap: 6rpx;
-  }
-  
-  .action-buttons .btn {
-    height: 80rpx;
-    font-size: 22rpx;
-  }
-  
-  .page-title {
-    font-size: 28rpx;
-  }
-  
-  .page-subtitle {
-    font-size: 20rpx;
-  }
-}

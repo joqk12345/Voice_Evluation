@@ -52,18 +52,16 @@
   <!-- 支付方式 -->
   <view class="payment-methods">
     <view class="method-header">
-      <text class="method-title">选择支付方式</text>
+      <text class="method-title">支付方式</text>
     </view>
     <view class="method-list">
-      <view class="method-item" bindtap="selectPaymentMethod" data-type="wechat">
+      <view class="method-item selected">
         <view class="method-icon">💚</view>
         <text class="method-name">微信支付</text>
-        <view class="method-radio {{selectedMethod === 'wechat' ? 'selected' : ''}}"></view>
+        <view class="method-radio selected"></view>
       </view>
-      <view class="method-item" bindtap="selectPaymentMethod" data-type="alipay">
-        <view class="method-icon">💙</view>
-        <text class="method-name">支付宝</text>
-        <view class="method-radio {{selectedMethod === 'alipay' ? 'selected' : ''}}"></view>
+      <view class="method-tip">
+        <text class="tip-text">小程序仅支持微信支付</text>
       </view>
     </view>
   </view>
@@ -86,4 +84,7 @@
     </button>
   </view>
 </view>
+
+
+
 

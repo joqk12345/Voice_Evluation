@@ -1,103 +1,90 @@
-<!--pages/history/history.wxml - 专业音频分析风格-->
-
+<!--pages/history/history.wxml - 简洁温暖风格，与首页统一-->
 <view class="history-container">
-  <!-- 数据图表装饰 -->
-  <view class="data-chart-decoration">
-    <view class="chart-bar"></view>
-    <view class="chart-bar"></view>
-    <view class="chart-bar"></view>
-    <view class="chart-bar"></view>
-    <view class="chart-bar"></view>
-    <view class="chart-bar"></view>
-  </view>
-
-  <!-- 页面标题 -->
+  <!-- 情绪化标题 -->
   <view class="page-header">
-    <text class="page-title">评测记录</text>
-    <text class="page-subtitle">共{{historyList.length}}条记录</text>
+    <text class="page-title">评测历史</text>
+    <text class="page-subtitle" wx:if="{{historyList.length > 0}}">共{{historyList.length}}条记录</text>
+    <text class="page-subtitle" wx:else>记录你的每一次进步 ✨</text>
   </view>
 
-  <!-- 统计概览 -->
-  <view class="stats-overview">
-    <view class="stats-grid">
-      <view class="stat-item">
-        <text class="stat-number">{{totalRecords}}</text>
-        <text class="stat-label">总评测次数</text>
-      </view>
-      <view class="stat-item">
-        <text class="stat-number">{{averageScore}}</text>
-        <text class="stat-label">平均分数</text>
-      </view>
+  <!-- 统计卡片 -->
+  <view class="stats-card" wx:if="{{historyList.length > 0}}">
+    <view class="stat-item">
+      <text class="stat-number">{{totalTests}}</text>
+      <text class="stat-label">总次数</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <text class="stat-number">{{improvement > 0 ? '+' : ''}}{{improvement}}</text>
+      <text class="stat-label">进步</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <text class="stat-number">{{bestScore}}</text>
+      <text class="stat-label">最高分</text>
     </view>
   </view>
 
-  <!-- 筛选器 -->
-  <view class="filter-section">
-    <view class="filter-tabs">
-      <view class="filter-tab {{currentFilter === 'all' ? 'active' : ''}}" bindtap="switchFilter" data-filter="all">
-        全部
-      </view>
-      <view class="filter-tab {{currentFilter === 'recent' ? 'active' : ''}}" bindtap="switchFilter" data-filter="recent">
-        最近
-      </view>
-      <view class="filter-tab {{currentFilter === 'high' ? 'active' : ''}}" bindtap="switchFilter" data-filter="high">
-        高分
-      </view>
-    </view>
+  <!-- 变化趋势提示 -->
+  <view class="trend-tip" wx:if="{{recentChanges && recentChanges.length > 0}}">
+    <text class="trend-tip-text">📈 最近变化：</text>
+    <text class="trend-tip-value" wx:for="{{recentChanges}}" wx:key="date" wx:for-item="change">
+      {{change.scoreChange > 0 ? '+' : ''}}{{change.scoreChange}}分
+    </text>
   </view>
 
   <!-- 历史记录列表 -->
   <view class="history-section">
     <view class="history-list" wx:if="{{historyList.length > 0}}">
-      <view class="history-item" wx:for="{{historyList}}" wx:key="id">
-        <!-- 记录头部 -->
-        <view class="record-header">
-          <view class="record-info">
-            <view class="record-title">
-              <text class="song-name">{{item.song}}</text>
+      <view class="history-item" wx:for="{{historyList}}" wx:key="id" bindtap="viewDetail" data-item="{{item}}">
+        <view class="item-main">
+          <view class="item-left">
+            <view class="score-circle">
+              <text class="score-number">{{item.score}}</text>
+            </view>
+          </view>
+          <view class="item-content">
+            <view class="item-header">
+              <text class="song-name">{{item.song || '自定义评测'}}</text>
               <text class="record-date">{{item.date}}</text>
             </view>
-            <view class="record-score">
-              <text class="score-number">{{item.overallScore}}</text>
-              <text class="score-label">分</text>
+            <view class="item-metrics">
+              <view class="metric-tag">
+                <text class="metric-label">音准</text>
+                <text class="metric-value">{{item.pitch}}</text>
+              </view>
+              <view class="metric-tag">
+                <text class="metric-label">节奏</text>
+                <text class="metric-value">{{item.rhythm}}</text>
+              </view>
+              <view class="metric-tag">
+                <text class="metric-label">音量</text>
+                <text class="metric-value">{{item.volume}}</text>
+              </view>
+              <view class="metric-tag">
+                <text class="metric-label">音色</text>
+                <text class="metric-value">{{item.timbre}}</text>
+              </view>
             </view>
           </view>
         </view>
-
-        <!-- 详细指标 -->
-        <view class="metrics-grid">
-          <view class="metric-item">
-            <text class="metric-label">音准</text>
-            <text class="metric-value">{{item.pitch}}</text>
+        <view class="item-actions">
+          <!-- 播放按钮 -->
+          <view class="action-btn play-btn {{playingId === item.id ? 'playing' : ''}}" 
+                catchtap="playRecord" 
+                data-item="{{item}}"
+                wx:if="{{item.recordFilePath}}">
+            <text class="action-icon">{{playingId === item.id ? '⏸️' : '▶️'}}</text>
           </view>
-          <view class="metric-item">
-            <text class="metric-label">节奏</text>
-            <text class="metric-value">{{item.rhythm}}</text>
+          <!-- 对比选择按钮 -->
+          <view class="action-btn compare-btn {{item.selected ? 'selected' : ''}}" 
+                catchtap="selectForComparison" 
+                data-item="{{item}}">
+            <text class="action-icon">📊</text>
           </view>
-          <view class="metric-item">
-            <text class="metric-label">音量</text>
-            <text class="metric-value">{{item.volume}}</text>
-          </view>
-          <view class="metric-item">
-            <text class="metric-label">音色</text>
-            <text class="metric-value">{{item.timbre}}</text>
-          </view>
-        </view>
-
-        <!-- 记录底部 -->
-        <view class="record-footer">
-          <view class="record-meta">
-            <text class="duration">时长: {{item.duration}}</text>
-          </view>
-          <view class="record-actions">
-            <view class="action-control" bindtap="shareRecord" data-id="{{item.id}}">
-              <view class="control-dots">⋯</view>
-              <view class="control-record">●</view>
-            </view>
-            <view class="action-control danger" bindtap="deleteRecord" data-id="{{item.id}}">
-              <view class="control-dots">⋯</view>
-              <view class="control-record">●</view>
-            </view>
+          <!-- 删除按钮 -->
+          <view class="action-btn delete-btn" catchtap="deleteRecord" data-id="{{item.id}}">
+            <text class="action-icon">🗑️</text>
           </view>
         </view>
       </view>
@@ -105,42 +92,80 @@
 
     <!-- 空状态 -->
     <view class="empty-state" wx:else>
-      <view class="empty-icon">📊</view>
-      <text class="empty-title">暂无评测记录</text>
-      <text class="empty-desc">开始您的第一次声乐评测吧</text>
+      <text class="empty-icon">📊</text>
+      <text class="empty-title">还没有评测记录</text>
+      <text class="empty-desc">开始你的第一次评测吧</text>
       <button class="empty-action" bindtap="goToRecord">开始评测</button>
     </view>
   </view>
 
-  <!-- 进步趋势 -->
-  <view class="progress-section" wx:if="{{historyList.length > 1}}">
-    <view class="progress-card">
-      <view class="progress-header">
-        <text class="progress-title">进步趋势</text>
-        <text class="progress-subtitle">分数时间</text>
+  <!-- 对比弹窗 -->
+  <view class="comparison-modal {{showComparison ? 'show' : ''}}" wx:if="{{showComparison && comparisonData}}" catchtap="closeComparison">
+    <view class="comparison-content" catchtap="">
+      <view class="comparison-header">
+        <text class="comparison-title">📊 对比分析</text>
+        <text class="comparison-close" bindtap="closeComparison">✕</text>
       </view>
       
-      <view class="progress-chart">
-        <view class="chart-container">
-          <view class="chart-bar" wx:for="{{trendData}}" wx:key="index" style="height: {{item.height}}rpx;">
-            <view class="bar-value">{{item.score}}</view>
-          </view>
+      <view class="comparison-items">
+        <view class="comparison-item">
+          <text class="comparison-date">{{comparisonData.item1.date}}</text>
+          <text class="comparison-score">{{comparisonData.item1.score}}分</text>
         </view>
-        <view class="chart-labels">
-          <text class="chart-label" wx:for="{{trendData}}" wx:key="index">{{item.date}}</text>
+        <view class="comparison-vs">VS</view>
+        <view class="comparison-item">
+          <text class="comparison-date">{{comparisonData.item2.date}}</text>
+          <text class="comparison-score">{{comparisonData.item2.score}}分</text>
         </view>
       </view>
-    </view>
-  </view>
 
-  <!-- 分页 -->
-  <view class="pagination" wx:if="{{totalPages > 1}}">
-    <view class="page-btn {{currentPage === 1 ? 'disabled' : ''}}" bindtap="prevPage">
-      <text>‹</text>
-    </view>
-    <view class="page-btn active">{{currentPage}}</view>
-    <view class="page-btn {{currentPage === totalPages ? 'disabled' : ''}}" bindtap="nextPage">
-      <text>›</text>
+      <view class="comparison-diffs">
+        <view class="diff-item">
+          <text class="diff-label">总分变化</text>
+          <text class="diff-value {{comparisonData.scoreDiff > 0 ? 'positive' : 'negative'}}">
+            {{comparisonData.scoreDiff > 0 ? '+' : ''}}{{comparisonData.scoreDiff}}分
+          </text>
+        </view>
+        <view class="diff-item">
+          <text class="diff-label">音准</text>
+          <text class="diff-value {{comparisonData.pitchDiff > 0 ? 'positive' : 'negative'}}">
+            {{comparisonData.pitchDiff > 0 ? '+' : ''}}{{comparisonData.pitchDiff}}
+          </text>
+        </view>
+        <view class="diff-item">
+          <text class="diff-label">节奏</text>
+          <text class="diff-value {{comparisonData.rhythmDiff > 0 ? 'positive' : 'negative'}}">
+            {{comparisonData.rhythmDiff > 0 ? '+' : ''}}{{comparisonData.rhythmDiff}}
+          </text>
+        </view>
+        <view class="diff-item">
+          <text class="diff-label">音量</text>
+          <text class="diff-value {{comparisonData.volumeDiff > 0 ? 'positive' : 'negative'}}">
+            {{comparisonData.volumeDiff > 0 ? '+' : ''}}{{comparisonData.volumeDiff}}
+          </text>
+        </view>
+        <view class="diff-item">
+          <text class="diff-label">音色</text>
+          <text class="diff-value {{comparisonData.timbreDiff > 0 ? 'positive' : 'negative'}}">
+            {{comparisonData.timbreDiff > 0 ? '+' : ''}}{{comparisonData.timbreDiff}}
+          </text>
+        </view>
+      </view>
+
+      <view class="comparison-insights" wx:if="{{comparisonData.improvements.length > 0 || comparisonData.regressions.length > 0}}">
+        <view class="insight-section" wx:if="{{comparisonData.improvements.length > 0}}">
+          <text class="insight-title">✅ 改进点：</text>
+          <text class="insight-item" wx:for="{{comparisonData.improvements}}" wx:key="*this">{{item}}</text>
+        </view>
+        <view class="insight-section" wx:if="{{comparisonData.regressions.length > 0}}">
+          <text class="insight-title">⚠️ 需注意：</text>
+          <text class="insight-item" wx:for="{{comparisonData.regressions}}" wx:key="*this">{{item}}</text>
+        </view>
+        <view class="insight-section" wx:if="{{comparisonData.keyDifferences.length > 0}}">
+          <text class="insight-title">🎯 关键差异：</text>
+          <text class="insight-item" wx:for="{{comparisonData.keyDifferences}}" wx:key="*this">{{item}}</text>
+        </view>
+      </view>
     </view>
   </view>
 </view>

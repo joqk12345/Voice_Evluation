@@ -5,7 +5,8 @@ const { formatDate } = require('../../utils/util.js')
 Page({
   data: {
     userInfo: {},
-    achievements: []
+    achievements: [],
+    isEditingNickname: false
   },
 
   onLoad() {
@@ -27,10 +28,39 @@ Page({
 
   // 加载用户信息
   loadUserInfo() {
-    const userInfo = app.globalData.mockUser
+    // 优先从本地存储获取
+    let userInfo = null
+    try {
+      const storedUserInfo = wx.getStorageSync('userInfo')
+      if (storedUserInfo && storedUserInfo.nickName) {
+        userInfo = storedUserInfo
+      }
+    } catch (error) {
+      console.error('读取用户信息失败:', error)
+    }
+    
+    // 如果本地没有，使用全局数据或模拟数据
+    if (!userInfo) {
+      userInfo = app.globalData.userInfo || app.globalData.mockUser
+    }
+    
+    // 确保有必要的字段
+    if (!userInfo) {
+      userInfo = {
+        nickName: '音乐爱好者',
+        avatarUrl: '',
+        level: '初级',
+        totalTests: 0,
+        bestScore: 0
+      }
+    }
+    
     this.setData({
       userInfo: userInfo
     })
+    
+    // 同步到全局
+    app.globalData.userInfo = userInfo
   },
 
   // 加载成就数据
@@ -99,20 +129,163 @@ Page({
     })
   },
 
-  // 编辑资料
-  editProfile() {
-    wx.showModal({
-      title: '编辑资料',
-      content: '完善您的个人信息',
+  // 头像按钮点击（降级方案：如果 chooseAvatar 不支持，使用传统方式）
+  onAvatarButtonTap(e) {
+    console.log('头像按钮被点击', e)
+    // 注意：如果 open-type="chooseAvatar" 不支持，这个事件会触发
+    // 但通常 chooseAvatar 会先触发，所以这里主要是作为备用
+  },
+
+  // 选择图片作为头像（降级方案）
+  chooseImageAsAvatar() {
+    wx.chooseImage({
+      count: 1,
+      sizeType: ['compressed'],
+      sourceType: ['album', 'camera'],
       success: (res) => {
-        if (res.confirm) {
-          wx.showToast({
-            title: '编辑功能开发中',
-            icon: 'none'
-          })
+        const tempFilePath = res.tempFilePaths[0]
+        console.log('选择图片成功:', tempFilePath)
+        
+        // 更新头像
+        const userInfo = {
+          ...this.data.userInfo,
+          avatarUrl: tempFilePath
         }
+        
+        this.saveUserInfo(userInfo)
+        
+        wx.showToast({
+          title: '头像已更新',
+          icon: 'success',
+          duration: 1500
+        })
+      },
+      fail: (err) => {
+        console.error('选择图片失败:', err)
+        wx.showToast({
+          title: '选择图片失败',
+          icon: 'none'
+        })
       }
     })
+  },
+
+  // 选择头像 - 使用微信头像昵称填写能力
+  onChooseAvatar(e) {
+    console.log('选择头像回调', e)
+    
+    if (!e || !e.detail) {
+      console.error('选择头像回调数据异常:', e)
+      // 如果 chooseAvatar 失败，使用降级方案
+      this.chooseImageAsAvatar()
+      return
+    }
+    
+    const { avatarUrl } = e.detail
+    
+    if (!avatarUrl) {
+      console.warn('未获取到头像URL')
+      // 如果未获取到头像，使用降级方案
+      this.chooseImageAsAvatar()
+      return
+    }
+    
+    console.log('获取到头像URL:', avatarUrl)
+    
+    // 更新头像
+    const userInfo = {
+      ...this.data.userInfo,
+      avatarUrl: avatarUrl
+    }
+    
+    this.saveUserInfo(userInfo)
+    
+    wx.showToast({
+      title: '头像已更新',
+      icon: 'success',
+      duration: 1500
+    })
+  },
+
+  // 昵称输入框获得焦点
+  onNicknameFocus(e) {
+    this.setData({
+      isEditingNickname: true
+    })
+  },
+
+  // 昵称输入框失焦
+  onNicknameBlur(e) {
+    this.setData({
+      isEditingNickname: false
+    })
+    
+    const nickName = e.detail.value.trim()
+    if (nickName && nickName !== this.data.userInfo.nickName) {
+      this.updateNickname(nickName)
+    }
+  },
+
+  // 昵称输入框确认
+  onNicknameConfirm(e) {
+    const nickName = e.detail.value.trim()
+    if (nickName && nickName !== this.data.userInfo.nickName) {
+      this.updateNickname(nickName)
+    }
+  },
+
+  // 更新昵称
+  updateNickname(nickName) {
+    if (!nickName || nickName.length === 0) {
+      wx.showToast({
+        title: '昵称不能为空',
+        icon: 'none'
+      })
+      return
+    }
+    
+    if (nickName.length > 20) {
+      wx.showToast({
+        title: '昵称不能超过20个字符',
+        icon: 'none'
+      })
+      return
+    }
+    
+    const userInfo = {
+      ...this.data.userInfo,
+      nickName: nickName
+    }
+    
+    this.saveUserInfo(userInfo)
+    
+    wx.showToast({
+      title: '昵称已更新',
+      icon: 'success',
+      duration: 1500
+    })
+  },
+
+  // 保存用户信息
+  saveUserInfo(userInfo) {
+    // 更新页面数据
+    this.setData({
+      userInfo: userInfo
+    })
+    
+    // 保存到全局
+    app.globalData.userInfo = userInfo
+    
+    // 保存到本地存储
+    try {
+      wx.setStorageSync('userInfo', userInfo)
+    } catch (error) {
+      console.error('保存用户信息失败:', error)
+      wx.showToast({
+        title: '保存失败，请重试',
+        icon: 'none'
+      })
+    }
   },
 
   // 查看历史
@@ -175,6 +348,63 @@ Page({
       content: '声乐评测小程序 v1.0\n\n帮助您发现声音之美，提升声乐水平。',
       showCancel: false,
       confirmText: '我知道了'
+    })
+  },
+
+  // 复制微信号
+  copyWechatId() {
+    const wechatId = 'chaojichangjiang'
+    wx.setClipboardData({
+      data: wechatId,
+      success: () => {
+        wx.showToast({
+          title: '微信号已复制',
+          icon: 'success',
+          duration: 2000
+        })
+      },
+      fail: () => {
+        wx.showToast({
+          title: '复制失败，请手动复制',
+          icon: 'none'
+        })
+      }
+    })
+  },
+
+  // 添加微信联系人
+  addWechatContact() {
+    const wechatId = 'chaojichangjiang'
+    
+    // 先复制到剪贴板
+    wx.setClipboardData({
+      data: wechatId,
+      success: () => {
+        wx.showModal({
+          title: '添加客服微信',
+          content: `微信号已复制到剪贴板：${wechatId}\n\n请在微信中搜索并添加好友。`,
+          confirmText: '打开微信',
+          cancelText: '知道了',
+          success: (res) => {
+            if (res.confirm) {
+              // 尝试打开微信（如果支持）
+              wx.showToast({
+                title: '请手动打开微信添加',
+                icon: 'none',
+                duration: 2000
+              })
+            }
+          }
+        })
+      },
+      fail: () => {
+        wx.showModal({
+          title: '添加客服微信',
+          content: `客服微信号：${wechatId}\n\n请在微信中搜索并添加好友。`,
+          showCancel: false,
+          confirmText: '我知道了'
+        })
+      }
     })
   },
 

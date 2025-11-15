@@ -53,8 +53,8 @@
     "disableSWC": true
   },
   "compileType": "miniprogram",
-  "libVersion": "2.19.4",
-  "appid": "wx9992cb68742678d0",
+  "libVersion": "3.10.0",
+  "appid": "wx5c3ad40e945b348d",
   "projectname": "Voice_Evluation-V1",
   "isGameTourist": false,
   "condition": {

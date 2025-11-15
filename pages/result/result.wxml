@@ -1,50 +1,94 @@
-<!--pages/result/result.wxml-->
+<!--pages/result/result.wxml - 专业简洁风格，参考 tobiplayer renderer-->
 <view class="result-container">
-  <!-- 总体评分 -->
-  <view class="score-section card">
-    <view class="score-header">
-      <text class="score-title">评测结果</text>
-      <text class="score-date">{{currentDate}}</text>
+  <!-- 简洁标题栏 -->
+  <view class="page-header">
+    <view class="header-content">
+      <text class="page-title">音频分析结果</text>
+      <text class="page-date">{{currentDate}}</text>
+    </view>
+  </view>
+
+  <!-- 非人声提示（仅当人声检测启用且检测到非人声时显示） -->
+  <view class="voice-warning" wx:if="{{!isVoice && voiceReason && voiceReason.indexOf('已禁用') === -1}}">
+    <view class="warning-content">
+      <text class="warning-icon">⚠️</text>
+      <view class="warning-text">
+        <text class="warning-title">未检测到人声</text>
+        <text class="warning-desc">{{voiceReason || '请确保录制的是您的歌声'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 时长提示 -->
+  <view class="voice-warning" wx:if="{{durationCheck && durationCheck.penalty > 0}}">
+    <view class="warning-content">
+      <text class="warning-icon">📏</text>
+      <view class="warning-text">
+        <text class="warning-title">录音时长不合适</text>
+        <text class="warning-desc">{{durationCheck.reason}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 旋律提示（仅当旋律检测启用且检测到无旋律时显示） -->
+  <view class="voice-warning" wx:if="{{melodyCheck && !melodyCheck.hasMelody && melodyCheck.reason && melodyCheck.reason.indexOf('已禁用') === -1}}">
+    <view class="warning-content">
+      <text class="warning-icon">🎵</text>
+      <view class="warning-text">
+        <text class="warning-title">旋律不明显</text>
+        <text class="warning-desc">{{melodyCheck.reason}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 波形和音高展示（专业可视化） -->
+  <view class="waveform-section" wx:if="{{hasWaveform}}">
+    <view class="section-header">
+      <text class="section-title">波形与音高分析</text>
+      <text class="section-subtitle">Waveform & Pitch Analysis</text>
+    </view>
+    <view class="waveform-wrapper">
+      <canvas 
+        canvas-id="resultWaveformCanvas" 
+        id="resultWaveformCanvas"
+        class="waveform-canvas"
+        style="width: 100%; height: 500rpx;"
+      ></canvas>
+    </view>
     </view>
     
-    <view class="overall-score">
-      <view class="score-circle">
+  <!-- 总分展示（简洁卡片） -->
+  <view class="score-section">
+    <view class="score-card">
+      <view class="score-main">
         <text class="score-number">{{resultData.score}}</text>
-        <text class="score-label">综合评分</text>
+        <text class="score-unit">分</text>
       </view>
-      <view class="score-level">
-        <text class="level-text">{{scoreLevel.level}}</text>
+      <view class="score-info">
+        <text class="level-badge">{{scoreLevel.level}}</text>
         <text class="level-desc">{{getLevelDescription(resultData.score)}}</text>
       </view>
     </view>
   </view>
 
   <!-- 详细指标 -->
-  <view class="metrics-section card">
-    <view class="section-header">
-      <text class="section-title">详细分析</text>
-    </view>
-    
-    <view class="metrics-list">
-      <view class="metric-item" wx:for="{{metricsList}}" wx:key="index">
+  <view class="metrics-section">
+    <view class="section-title">详细分析</view>
+    <view class="metrics-grid">
+      <view class="metric-card" wx:for="{{metricsList}}" wx:key="index">
         <view class="metric-header">
-          <view class="metric-icon">{{item.icon}}</view>
-          <view class="metric-info">
+          <text class="metric-icon">{{item.icon}}</text>
             <text class="metric-name">{{item.name}}</text>
-            <text class="metric-desc">{{item.description}}</text>
           </view>
           <view class="metric-score">
             <text class="score-value">{{item.score}}</text>
             <text class="score-unit">分</text>
           </view>
-        </view>
-        
         <view class="metric-progress">
           <view class="progress-bar">
-            <view class="progress-fill" style="width: {{item.score}}%; background: {{item.color}};"></view>
+            <view class="progress-fill" style="width: {{item.score}}%;"></view>
           </view>
         </view>
-        
         <view class="metric-advice">
           <text class="advice-text">{{item.advice}}</text>
         </view>
@@ -53,52 +97,42 @@
   </view>
 
   <!-- 改进建议 -->
-  <view class="advice-section card">
-    <view class="section-header">
-      <text class="section-title">改进建议</text>
-    </view>
-    
+  <view class="advice-section">
+    <view class="section-title">改进建议</view>
     <view class="advice-list">
       <view class="advice-item" wx:for="{{adviceList}}" wx:key="index">
-        <view class="advice-icon">💡</view>
-        <text class="advice-content">{{item}}</text>
-      </view>
-    </view>
-  </view>
-
-  <!-- 历史对比 -->
-  <view class="comparison-section card" wx:if="{{hasHistory}}">
-    <view class="section-header">
-      <text class="section-title">历史对比</text>
-    </view>
-    
-    <view class="comparison-chart">
-      <view class="chart-item" wx:for="{{comparisonData}}" wx:key="index">
-        <text class="chart-label">{{item.label}}</text>
-        <view class="chart-bar">
-          <view class="bar-fill" style="width: {{item.current}}%; background: var(--primary-color);"></view>
-          <view class="bar-fill previous" style="width: {{item.previous}}%; background: var(--text-light);"></view>
-        </view>
-        <text class="chart-value">{{item.current}}</text>
+        <text class="advice-icon">💡</text>
+        <text class="advice-text">{{item}}</text>
       </view>
     </view>
   </view>
 
   <!-- 操作按钮 -->
   <view class="action-section">
-    <button class="btn btn-outline" bindtap="playRecord">
-      <text class="btn-icon">▶️</text>
-      <text>播放录音</text>
+    <button 
+      class="action-btn secondary" 
+      bindtap="playRecord" 
+      wx:if="{{recordFilePath}}"
+    >
+      <text class="btn-icon">{{isPlaying ? '⏸️' : '▶️'}}</text>
+      <text class="btn-text">{{isPlaying ? '暂停播放' : '播放录音'}}</text>
     </button>
     
-    <button class="btn btn-primary" bindtap="viewRecommend">
+    <button class="action-btn primary" bindtap="viewRecommend">
       <text class="btn-icon">🎵</text>
-      <text>查看推荐</text>
+      <text class="btn-text">查看推荐</text>
     </button>
     
-    <view class="action-control" bindtap="shareResult">
-      <view class="control-dots">⋯</view>
-      <view class="control-record">●</view>
-    </view>
+    <button class="action-btn share-btn" bindtap="generateShareImage">
+      <text class="btn-icon">📤</text>
+      <text class="btn-text">生成分享图片</text>
+    </button>
   </view>
+
+  <!-- 隐藏的Canvas用于生成图片 -->
+  <canvas 
+    canvas-id="shareCanvas" 
+    id="shareCanvas"
+    class="share-canvas"
+  ></canvas>
 </view>

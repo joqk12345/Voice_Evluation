@@ -1,19 +1,40 @@
 <!--pages/profile/profile.wxml-->
 <view class="profile-container">
   <!-- 用户信息卡片 -->
-  <view class="user-card card">
+  <view class="user-card">
     <view class="user-header">
-      <view class="user-avatar" wx:if="{{!userInfo.avatarUrl}}">
+      <view class="user-avatar-wrapper">
+        <!-- 使用微信头像昵称填写能力 -->
+        <button 
+          class="avatar-button" 
+          open-type="chooseAvatar" 
+          bindchooseavatar="onChooseAvatar"
+          bindtap="onAvatarButtonTap"
+        >
+          <view class="user-avatar">
+            <view class="avatar-content" wx:if="{{!userInfo.avatarUrl}}">
         <text class="avatar-emoji">👤</text>
+            </view>
+            <image class="avatar-image" wx:else src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+            <view class="avatar-edit-icon">✏️</view>
+          </view>
+        </button>
       </view>
-      <image class="user-avatar" wx:else src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
       <view class="user-info">
-        <text class="user-name">{{userInfo.nickName || '音乐爱好者'}}</text>
-        <text class="user-level">{{userInfo.level || '初级'}} · 第{{userInfo.totalTests || 0}}次评测</text>
+        <view class="nickname-wrapper">
+          <input 
+            class="nickname-input" 
+            type="nickname" 
+            value="{{userInfo.nickName || '音乐爱好者'}}"
+            placeholder="请输入昵称"
+            bindblur="onNicknameBlur"
+            bindconfirm="onNicknameConfirm"
+            bindfocus="onNicknameFocus"
+            maxlength="20"
+          />
+        </view>
+        <text class="user-tag">{{userInfo.level || '初级'}} · 第{{userInfo.totalTests || 0}}次评测</text>
       </view>
-      <button class="edit-btn" bindtap="editProfile">
-        <text class="edit-icon">✏️</text>
-      </button>
     </view>
     
     <view class="user-stats">
@@ -21,10 +42,12 @@
         <text class="stat-number">{{userInfo.bestScore || 0}}</text>
         <text class="stat-label">最高分</text>
       </view>
+      <view class="stat-divider"></view>
       <view class="stat-item">
         <text class="stat-number">{{userInfo.totalTests || 0}}</text>
         <text class="stat-label">评测次数</text>
       </view>
+      <view class="stat-divider"></view>
       <view class="stat-item">
         <text class="stat-number">{{userInfo.level || '初级'}}</text>
         <text class="stat-label">当前等级</text>
@@ -36,60 +59,115 @@
   <view class="menu-section">
     <view class="menu-group">
       <view class="menu-item" bindtap="viewHistory">
-        <view class="menu-icon">📊</view>
+        <view class="menu-icon-wrapper">
+          <text class="menu-icon">📊</text>
+        </view>
+        <view class="menu-content">
         <text class="menu-title">评测历史</text>
-        <text class="menu-arrow">></text>
+          <text class="menu-desc">查看所有评测记录</text>
+        </view>
+        <text class="menu-arrow">→</text>
       </view>
       
       <view class="menu-item" bindtap="viewRecommend">
-        <view class="menu-icon">🎵</view>
+        <view class="menu-icon-wrapper">
+          <text class="menu-icon">🎵</text>
+        </view>
+        <view class="menu-content">
         <text class="menu-title">个性化推荐</text>
-        <text class="menu-arrow">></text>
+          <text class="menu-desc">为你推荐适合的歌曲</text>
+        </view>
+        <text class="menu-arrow">→</text>
       </view>
       
       <view class="menu-item" bindtap="viewAchievements">
-        <view class="menu-icon">🏆</view>
+        <view class="menu-icon-wrapper">
+          <text class="menu-icon">🏆</text>
+        </view>
+        <view class="menu-content">
         <text class="menu-title">成就徽章</text>
-        <text class="menu-arrow">></text>
+          <text class="menu-desc">你的成长足迹</text>
+        </view>
+        <text class="menu-arrow">→</text>
       </view>
     </view>
 
     <view class="menu-group">
       <view class="menu-item" bindtap="viewSettings">
-        <view class="menu-icon">⚙️</view>
+        <view class="menu-icon-wrapper">
+          <text class="menu-icon">⚙️</text>
+        </view>
+        <view class="menu-content">
         <text class="menu-title">设置</text>
-        <text class="menu-arrow">></text>
+          <text class="menu-desc">个性化设置</text>
+        </view>
+        <text class="menu-arrow">→</text>
       </view>
       
       <view class="menu-item" bindtap="viewHelp">
-        <view class="menu-icon">❓</view>
+        <view class="menu-icon-wrapper">
+          <text class="menu-icon">❓</text>
+        </view>
+        <view class="menu-content">
         <text class="menu-title">帮助与反馈</text>
-        <text class="menu-arrow">></text>
+          <text class="menu-desc">有问题随时告诉我们</text>
+        </view>
+        <text class="menu-arrow">→</text>
       </view>
       
       <view class="menu-item" bindtap="viewAbout">
-        <view class="menu-icon">ℹ️</view>
+        <view class="menu-icon-wrapper">
+          <text class="menu-icon">ℹ️</text>
+        </view>
+        <view class="menu-content">
         <text class="menu-title">关于我们</text>
-        <text class="menu-arrow">></text>
+          <text class="menu-desc">了解我们的故事</text>
+        </view>
+        <text class="menu-arrow">→</text>
       </view>
     </view>
   </view>
 
   <!-- 成就展示 -->
-  <view class="achievements-section card" wx:if="{{achievements.length > 0}}">
+  <view class="achievements-section" wx:if="{{achievements.length > 0}}">
     <view class="section-header">
-      <text class="section-title">最新成就</text>
-      <text class="section-more" bindtap="viewAchievements">查看全部</text>
+      <text class="section-title">✨ 最新成就</text>
+      <text class="section-more" bindtap="viewAchievements">查看全部 →</text>
     </view>
     
     <view class="achievements-list">
       <view class="achievement-item" wx:for="{{achievements}}" wx:key="index">
-        <view class="achievement-icon">{{item.icon}}</view>
-        <view class="achievement-info">
+        <text class="achievement-icon">{{item.icon}}</text>
           <text class="achievement-name">{{item.name}}</text>
-          <text class="achievement-desc">{{item.description}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 客服联系 -->
+  <view class="customer-service-section">
+    <view class="service-card">
+      <view class="service-header">
+        <text class="service-icon">💬</text>
+        <view class="service-info">
+          <text class="service-title">联系客服</text>
+          <text class="service-desc">咨询、约课、试课请添加客服微信</text>
         </view>
-        <view class="achievement-date">{{item.date}}</view>
+      </view>
+      <view class="service-content">
+        <view class="wechat-info">
+          <text class="wechat-label">客服微信号：</text>
+          <text class="wechat-number">chaojichangjiang</text>
+        </view>
+        <view class="service-actions">
+          <button class="service-btn copy-btn" bindtap="copyWechatId">
+            <text class="btn-icon">📋</text>
+            <text>复制微信号</text>
+          </button>
+          <button class="service-btn add-btn" bindtap="addWechatContact">
+            <text class="btn-icon">➕</text>
+            <text>添加微信</text>
+          </button>
+        </view>
       </view>
     </view>
   </view>

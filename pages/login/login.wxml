@@ -1,32 +1,28 @@
-<!--pages/login/login.wxml-->
+<!--pages/login/login.wxml - 温暖简洁风格-->
 <view class="login-container">
-  <!-- 背景装饰 -->
-  <view class="bg-decoration">
-    <view class="bg-circle bg-circle-1"></view>
-    <view class="bg-circle bg-circle-2"></view>
-    <view class="bg-circle bg-circle-3"></view>
-  </view>
-
   <!-- 主要内容 -->
   <view class="login-content">
     <!-- Logo和标题 -->
     <view class="logo-section">
-      <view class="logo">🎤</view>
+      <view class="logo-wrapper">
+        <view class="logo-icon">🎤</view>
+        <view class="logo-glow"></view>
+      </view>
       <text class="app-title">声乐评测</text>
       <text class="app-subtitle">发现你的声音之美</text>
     </view>
 
-    <!-- 功能介绍 -->
-    <view class="features">
-      <view class="feature-item">
+    <!-- 功能介绍卡片 -->
+    <view class="features-section">
+      <view class="feature-card">
         <view class="feature-icon">🎵</view>
         <text class="feature-text">专业音准分析</text>
       </view>
-      <view class="feature-item">
+      <view class="feature-card">
         <view class="feature-icon">🎼</view>
         <text class="feature-text">节奏感评测</text>
       </view>
-      <view class="feature-item">
+      <view class="feature-card">
         <view class="feature-icon">🎯</view>
         <text class="feature-text">个性化建议</text>
       </view>
@@ -36,23 +32,24 @@
     <view class="login-section">
       <button 
         class="login-btn" 
-        open-type="getUserProfile" 
-        bindgetuserprofile="getUserProfile"
+        bindtap="handleLoginClick"
         wx:if="{{!hasLogin}}"
       >
         <view class="btn-content">
-          <view class="btn-icon">🔐</view>
-          <text>微信一键登录</text>
+          <text class="btn-icon">🔐</text>
+          <text class="btn-text">微信一键登录</text>
         </view>
       </button>
 
-      <view class="user-info" wx:if="{{hasLogin}}">
-        <view class="user-avatar" wx:if="{{!userInfo.avatarUrl}}">
-          <text class="avatar-emoji">👤</text>
+      <view class="user-info-card" wx:if="{{hasLogin}}">
+        <view class="user-avatar-wrapper">
+          <view class="user-avatar" wx:if="{{!userInfo.avatarUrl}}">
+            <text class="avatar-emoji">👤</text>
+          </view>
+          <image class="user-avatar" wx:else src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
         </view>
-        <image class="user-avatar" wx:else src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
-        <text class="user-name">{{userInfo.nickName}}</text>
-        <button class="btn btn-outline" bindtap="completeProfile">完善资料</button>
+        <text class="user-name">{{userInfo.nickName || '用户'}}</text>
+        <button class="profile-btn" bindtap="completeProfile">完善资料</button>
       </view>
     </view>
 

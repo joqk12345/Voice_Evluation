@@ -116,9 +116,21 @@ Page({
 
   // 编辑个人资料
   editProfile() {
-    wx.navigateTo({
-      url: '/pages/profile/profile'
-    });
+    console.log('点击编辑个人资料')
+    // profile 是 tabBar 页面，需要使用 switchTab
+    wx.switchTab({
+      url: '/pages/profile/profile',
+      success: () => {
+        console.log('跳转到个人资料页面成功')
+      },
+      fail: (err) => {
+        console.error('跳转到个人资料页面失败:', err)
+        wx.showToast({
+          title: '跳转失败，请重试',
+          icon: 'none'
+        })
+      }
+    })
   },
 
   // 编辑偏好设置
@@ -404,12 +416,53 @@ Page({
 
   // 联系我们
   contactUs() {
-    wx.showModal({
-      title: '联系我们',
-      content: '客服微信：VoiceEval2024\n客服邮箱：support@voiceeval.com\n工作时间：9:00-18:00',
-      showCancel: false,
-      confirmText: '我知道了'
-    });
+    const wechatId = 'chaojichangjiang'
+    
+    wx.showActionSheet({
+      itemList: ['复制微信号', '添加客服微信'],
+      success: (res) => {
+        if (res.tapIndex === 0) {
+          // 复制微信号
+          wx.setClipboardData({
+            data: wechatId,
+            success: () => {
+              wx.showToast({
+                title: '微信号已复制',
+                icon: 'success',
+                duration: 2000
+              })
+            },
+            fail: () => {
+              wx.showToast({
+                title: '复制失败，请手动复制',
+                icon: 'none'
+              })
+            }
+          })
+        } else if (res.tapIndex === 1) {
+          // 添加客服微信
+          wx.setClipboardData({
+            data: wechatId,
+            success: () => {
+              wx.showModal({
+                title: '添加客服微信',
+                content: `微信号已复制到剪贴板：${wechatId}\n\n客服服务：\n• 咨询声乐评测相关问题\n• 预约一对一试听课\n• 了解课程详情\n\n请在微信中搜索并添加好友。`,
+                confirmText: '知道了',
+                showCancel: false
+              })
+            },
+            fail: () => {
+              wx.showModal({
+                title: '添加客服微信',
+                content: `客服微信号：${wechatId}\n\n客服服务：\n• 咨询声乐评测相关问题\n• 预约一对一试听课\n• 了解课程详情\n\n请在微信中搜索并添加好友。`,
+                showCancel: false,
+                confirmText: '我知道了'
+              })
+            }
+          })
+        }
+      }
+    })
   },
 
   // 检查更新
@@ -538,6 +591,78 @@ Page({
       title: '声乐评测 - 专业声乐学习应用',
       imageUrl: '/images/share-settings.png'
     };
+  },
+
+  // 查看错误日志
+  viewErrorLogs() {
+    try {
+      const errorLogs = wx.getStorageSync('recorder_error_logs') || []
+      
+      if (errorLogs.length === 0) {
+        wx.showModal({
+          title: '错误日志',
+          content: '暂无错误日志',
+          showCancel: false
+        })
+        return
+      }
+      
+      // 格式化所有错误日志
+      let logContent = `共 ${errorLogs.length} 条错误记录\n\n`
+      
+      // 显示最近 3 条
+      const recentLogs = errorLogs.slice(-3).reverse()
+      recentLogs.forEach((log, index) => {
+        logContent += `【错误 ${index + 1}】\n`
+        logContent += `时间: ${log.timestamp || '未知'}\n`
+        logContent += `错误: ${log.errMsg || log.errorMsg || '无'}\n`
+        logContent += `代码: ${log.errCode || log.errorCode || '无'}\n`
+        if (log.systemInfo) {
+          logContent += `设备: ${log.systemInfo.brand || ''} ${log.systemInfo.model || ''}\n`
+          logContent += `系统: ${log.systemInfo.system || ''} ${log.systemInfo.version || ''}\n`
+          logContent += `基础库: ${log.systemInfo.SDKVersion || '未知'}\n`
+        }
+        logContent += `\n`
+      })
+      
+      if (errorLogs.length > 3) {
+        logContent += `...还有 ${errorLogs.length - 3} 条记录\n\n`
+      }
+      
+      logContent += `提示：完整日志可通过开发者工具的 Storage 面板查看，键名：recorder_error_logs`
+      
+      wx.showModal({
+        title: '错误日志',
+        content: logContent,
+        showCancel: true,
+        confirmText: '知道了',
+        cancelText: '清除日志',
+        success: (res) => {
+          if (res.cancel) {
+            wx.showModal({
+              title: '确认清除',
+              content: '确定要清除所有错误日志吗？',
+              success: (confirmRes) => {
+                if (confirmRes.confirm) {
+                  wx.removeStorageSync('recorder_error_logs')
+                  wx.showToast({
+                    title: '日志已清除',
+                    icon: 'success'
+                  })
+                }
+              }
+            })
+          }
+        }
+      })
+    } catch (error) {
+      console.error('查看错误日志失败:', error)
+      wx.showToast({
+        title: '读取日志失败',
+        icon: 'none'
+      })
+    }
   }
 });
+
 

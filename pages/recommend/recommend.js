@@ -268,7 +268,8 @@ Page({
 
   // 预约试听一对一声乐课
   bookTutorClass() {
-    console.log('预约试听一对一声乐课')
+    const wechatId = 'chaojichangjiang'
+    
     wx.showModal({
       title: '预约试听',
       content: '是否预约免费试听一对一声乐课？专业老师将根据您的评测结果提供个性化指导。',
@@ -276,12 +277,39 @@ Page({
       cancelText: '稍后再说',
       success: (res) => {
         if (res.confirm) {
-          // 这里可以跳转到预约页面或联系客服
-          wx.showModal({
-            title: '预约成功',
-            content: '我们的客服将在24小时内联系您，安排试听时间。\n\n客服微信：VoiceTutor2024\n\n试听课程完全免费，让您体验专业声乐指导的魅力！',
-            showCancel: false,
-            confirmText: '我知道了'
+          // 复制微信号并提示
+          wx.setClipboardData({
+            data: wechatId,
+            success: () => {
+              wx.showModal({
+                title: '预约试听',
+                content: `微信号已复制到剪贴板：${wechatId}\n\n请添加客服微信，我们将为您安排试听时间。\n\n试听课程完全免费，让您体验专业声乐指导的魅力！`,
+                confirmText: '知道了',
+                cancelText: '复制微信号',
+                success: (modalRes) => {
+                  if (modalRes.cancel) {
+                    // 再次复制
+                    wx.setClipboardData({
+                      data: wechatId,
+                      success: () => {
+                        wx.showToast({
+                          title: '微信号已复制',
+                          icon: 'success'
+                        })
+                      }
+                    })
+                  }
+                }
+              })
+            },
+            fail: () => {
+              wx.showModal({
+                title: '预约试听',
+                content: `客服微信号：${wechatId}\n\n请添加客服微信，我们将为您安排试听时间。\n\n试听课程完全免费，让您体验专业声乐指导的魅力！`,
+                showCancel: false,
+                confirmText: '我知道了'
+              })
+            }
           })
         }
       }

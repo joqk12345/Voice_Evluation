@@ -1,6 +1,6 @@
 {
   "name": "voice-evaluation-miniprogram",
-  "version": "1.0.0",
+  "version": "1.1.3",
   "description": "声乐评测微信小程序",
   "main": "app.js",
   "scripts": {

@@ -1,7 +1,8 @@
 {
   "usingComponents": {},
   "navigationBarTitleText": "支付页面",
-  "navigationBarBackgroundColor": "#008080",
-  "navigationBarTextStyle": "white"
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black"
 }
+
 

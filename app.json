@@ -15,12 +15,13 @@
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#008080",
+    "navigationBarBackgroundColor": "#ffffff",
     "navigationBarTitleText": "声乐评测",
-    "navigationBarTextStyle": "white",
-    "backgroundColor": "#f5f5f5"
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#fef7ed"
   },
   "tabBar": {
+    "custom": true,
     "color": "#666666",
     "selectedColor": "#DAA520",
     "backgroundColor": "#ffffff",
@@ -44,14 +45,9 @@
       }
     ]
   },
-  "permission": {
-    "scope.record": {
-      "desc": "需要录音权限进行声乐评测"
-    },
-    "scope.writePhotosAlbum": {
-      "desc": "需要相册权限保存分享图片"
-    }
-  },
   "requiredBackgroundModes": ["audio"],
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "privacy": {
+    "desc": "为了提供声乐评测功能，需要获取您的录音权限。"
+  }
 }
