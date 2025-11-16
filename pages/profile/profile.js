@@ -381,17 +381,22 @@ Page({
       data: wechatId,
       success: () => {
         wx.showModal({
-          title: '添加客服微信',
-          content: `微信号已复制到剪贴板：${wechatId}\n\n请在微信中搜索并添加好友。`,
-          confirmText: '打开微信',
-          cancelText: '知道了',
+          title: '微信号已复制',
+          content: `客服微信号：${wechatId}\n\n✅ 微信号已复制到剪贴板\n\n📱 添加步骤：\n1. 返回微信主界面\n2. 点击右上角"+"号\n3. 选择"添加朋友"\n4. 点击"微信号/手机号"\n5. 粘贴并搜索\n6. 添加好友\n\n💬 添加后发送消息即可联系客服`,
+          confirmText: '知道了',
+          cancelText: '再次复制',
           success: (res) => {
-            if (res.confirm) {
-              // 尝试打开微信（如果支持）
-              wx.showToast({
-                title: '请手动打开微信添加',
-                icon: 'none',
-                duration: 2000
+            if (res.cancel) {
+              // 再次复制
+              wx.setClipboardData({
+                data: wechatId,
+                success: () => {
+                  wx.showToast({
+                    title: '微信号已复制',
+                    icon: 'success',
+                    duration: 2000
+                  })
+                }
               })
             }
           }
@@ -400,9 +405,31 @@ Page({
       fail: () => {
         wx.showModal({
           title: '添加客服微信',
-          content: `客服微信号：${wechatId}\n\n请在微信中搜索并添加好友。`,
-          showCancel: false,
-          confirmText: '我知道了'
+          content: `客服微信号：${wechatId}\n\n请长按复制微信号，然后：\n1. 返回微信主界面\n2. 点击右上角"+"号\n3. 选择"添加朋友"\n4. 点击"微信号/手机号"\n5. 粘贴并搜索\n6. 添加好友\n\n💬 添加后发送消息即可联系客服`,
+          confirmText: '知道了',
+          cancelText: '复制微信号',
+          success: (res) => {
+            if (res.cancel) {
+              // 尝试再次复制
+              wx.setClipboardData({
+                data: wechatId,
+                success: () => {
+                  wx.showToast({
+                    title: '微信号已复制',
+                    icon: 'success',
+                    duration: 2000
+                  })
+                },
+                fail: () => {
+                  wx.showToast({
+                    title: '复制失败，请手动输入',
+                    icon: 'none',
+                    duration: 2000
+                  })
+                }
+              })
+            }
+          }
         })
       }
     })

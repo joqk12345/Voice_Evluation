@@ -198,54 +198,81 @@
 }
 }
 
-/* 录音时的声波效果 */
-.sound-waves {
+/* 录音时的波动球效果（根据反馈优化） */
+.audio-ball-container {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
   height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   pointer-events: none;
 }
 
-.wave {
+.audio-ball {
+  width: 120rpx;
+  height: 120rpx;
+  position: relative;
+  transition: transform 0.1s ease-out;
+}
+
+.audio-ball-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6));
+  box-shadow: 
+    inset 0 4rpx 8rpx rgba(255, 255, 255, 0.8),
+    inset 0 -4rpx 8rpx rgba(0, 0, 0, 0.1),
+    0 8rpx 16rpx rgba(0, 0, 0, 0.2);
+  animation: ballPulse 1s ease-in-out infinite;
+}
+
+@keyframes ballPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.audio-ball-ripple {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  border: 3rpx solid rgba(255, 255, 255, 0.6);
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
-  animation: waveExpand 1.5s ease-out infinite;
+  border: 2rpx solid rgba(255, 255, 255, 0.5);
+  animation: rippleExpand 1.5s ease-out infinite;
 }
 
-.wave-1 {
-  width: 120%;
-  height: 120%;
+.ripple-1 {
   animation-delay: 0s;
 }
 
-.wave-2 {
-  width: 150%;
-  height: 150%;
-  animation-delay: 0.5s;
+.ripple-2 {
+  animation-delay: 0.3s;
 }
 
-.wave-3 {
-  width: 180%;
-  height: 180%;
-  animation-delay: 1s;
+.ripple-3 {
+  animation-delay: 0.6s;
 }
 
-@keyframes waveExpand {
+@keyframes rippleExpand {
   0% {
     width: 100%;
     height: 100%;
     opacity: 0.8;
   }
   100% {
-    width: 220%;
-    height: 220%;
+    width: 250%;
+    height: 250%;
     opacity: 0;
   }
 }

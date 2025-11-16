@@ -12,16 +12,19 @@
         <view class="record-button {{isRecording ? 'recording' : ''}}" bindtap="toggleRecord">
         <!-- 背景光晕效果 -->
         <view class="record-glow" wx:if="{{!isRecording}}"></view>
-        <!-- 录音时的声波效果 -->
-        <view class="sound-waves" wx:if="{{isRecording}}">
-          <view class="wave wave-1"></view>
-          <view class="wave wave-2"></view>
-          <view class="wave wave-3"></view>
+        <!-- 录音时的波动球效果（根据反馈优化） -->
+        <view class="audio-ball-container" wx:if="{{isRecording}}">
+          <view class="audio-ball" style="transform: scale({{audioBallScale}});">
+            <view class="audio-ball-inner"></view>
+            <view class="audio-ball-ripple ripple-1" style="animation-delay: 0s;"></view>
+            <view class="audio-ball-ripple ripple-2" style="animation-delay: 0.3s;"></view>
+            <view class="audio-ball-ripple ripple-3" style="animation-delay: 0.6s;"></view>
+          </view>
         </view>
-        <!-- 话筒图标 -->
-        <view class="record-icon-wrapper">
-          <view class="record-icon">{{isRecording ? '🎙️' : '🎙️'}}</view>
-          <view class="icon-sparkles" wx:if="{{!isRecording}}">
+        <!-- 未录音时的图标 -->
+        <view class="record-icon-wrapper" wx:if="{{!isRecording}}">
+          <view class="record-icon">🎙️</view>
+          <view class="icon-sparkles">
             <text class="sparkle sparkle-1">✨</text>
             <text class="sparkle sparkle-2">✨</text>
             <text class="sparkle sparkle-3">✨</text>

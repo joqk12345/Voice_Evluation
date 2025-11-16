@@ -8,6 +8,9 @@ App({
     // 后端 API 地址配置
     // TODO: 请替换为实际的后端 API 地址
     apiBaseUrl: 'https://your-backend-api.com', // 例如：'https://api.example.com'
+    // H5 页面地址配置（用于分享链接）
+    // TODO: 请替换为实际的 H5 页面部署地址
+    h5BaseUrl: 'https://your-h5-domain.com', // 例如：'https://h5.example.com' 或 'https://your-domain.com'
     // 模拟用户数据
     mockUser: {
       nickName: '音乐爱好者',

@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="声乐评测结果 - 查看您的声乐评测详细报告">
+  <title>声乐评测结果</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      background: linear-gradient(135deg, #6b46c1 0%, #9333ea 30%, #f97316 70%, #fbbf24 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 750px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #6b46c1 0%, #9333ea 50%, #f97316 100%);
+      padding: 40px 20px;
+      text-align: center;
+      color: #fff;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .header .emoji {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    .header .date {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    .score-section {
+      padding: 40px 20px;
+      text-align: center;
+      background: #fff;
+    }
+
+    .score-circle {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 30px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .score-ring {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+    }
+
+    .score-progress {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+    }
+
+    .score-text {
+      position: relative;
+      z-index: 1;
+    }
+
+    .score-number {
+      font-size: 72px;
+      font-weight: bold;
+      color: #333;
+      line-height: 1;
+    }
+
+    .score-unit {
+      font-size: 24px;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    .level-badge {
+      display: inline-block;
+      padding: 8px 20px;
+      background: rgba(255, 154, 86, 0.25);
+      border-radius: 20px;
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .message {
+      font-size: 18px;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      padding: 0 20px;
+    }
+
+    .comparison {
+      font-size: 16px;
+      color: #999;
+      margin-bottom: 30px;
+    }
+
+    .metrics-section {
+      padding: 30px 20px;
+      background: #f8f9fa;
+    }
+
+    .metrics-title {
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 30px;
+      color: #333;
+    }
+
+    .metric-item {
+      margin-bottom: 25px;
+    }
+
+    .metric-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .metric-name {
+      font-size: 18px;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .metric-score {
+      font-size: 20px;
+      font-weight: bold;
+      color: #ff9a56;
+    }
+
+    .metric-bar {
+      height: 12px;
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .metric-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ff9a56 0%, #ffad70 50%, #ffd700 100%);
+      border-radius: 6px;
+      transition: width 1s ease;
+      width: 0;
+    }
+
+    .advice-section {
+      padding: 30px 20px;
+      background: #fff;
+    }
+
+    .advice-title {
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .advice-list {
+      list-style: none;
+    }
+
+    .advice-item {
+      padding: 15px;
+      margin-bottom: 10px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      border-left: 4px solid #ff9a56;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #666;
+    }
+
+    .achievements-section {
+      padding: 30px 20px;
+      background: #f8f9fa;
+      text-align: center;
+    }
+
+    .achievements-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .achievements-list {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .achievement-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .achievement-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(255, 154, 86, 0.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+    }
+
+    .achievement-name {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .footer {
+      padding: 30px 20px;
+      text-align: center;
+      background: #fff;
+      border-top: 1px solid #eee;
+    }
+
+    .footer-text {
+      font-size: 14px;
+      color: #999;
+      margin-bottom: 20px;
+    }
+
+    .qrcode-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .qrcode-placeholder {
+      width: 150px;
+      height: 150px;
+      background: #f0f0f0;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #999;
+    }
+
+    .share-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .share-btn {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #ff9a56 0%, #ffd700 100%);
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .share-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .share-btn:active {
+      transform: scale(0.95);
+    }
+
+    .loading {
+      text-align: center;
+      padding: 100px 20px;
+      color: #999;
+    }
+
+    .error {
+      text-align: center;
+      padding: 100px 20px;
+      color: #f44336;
+    }
+
+    @media (max-width: 480px) {
+      .header h1 {
+        font-size: 24px;
+      }
+
+      .score-circle {
+        width: 150px;
+        height: 150px;
+      }
+
+      .score-number {
+        font-size: 54px;
+      }
+
+      .metric-name {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="app">
+    <div class="loading" id="loading">加载中...</div>
+    <div id="content" style="display: none;">
+      <!-- Header -->
+      <div class="header">
+        <div class="emoji">🎶</div>
+        <h1>今日声音报告</h1>
+        <div class="date" id="date"></div>
+      </div>
+
+      <!-- Score Section -->
+      <div class="score-section">
+        <div class="score-circle">
+          <svg class="score-ring" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="82" fill="none" stroke="rgba(255, 255, 255, 0.2)" stroke-width="18"/>
+            <circle cx="100" cy="100" r="82" fill="none" stroke="url(#gradient)" stroke-width="18" 
+                    stroke-dasharray="515" stroke-dashoffset="515" stroke-linecap="round"
+                    id="scoreProgressCircle" transform="rotate(-90 100 100)"/>
+            <defs>
+              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#ff9a56;stop-opacity:1" />
+                <stop offset="50%" style="stop-color:#ffad70;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#ffd700;stop-opacity:1" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="score-text">
+            <div class="score-number" id="scoreNumber">0</div>
+            <div class="score-unit">分</div>
+          </div>
+        </div>
+        <div class="level-badge" id="levelBadge">初级</div>
+        <div class="message" id="message"></div>
+        <div class="comparison" id="comparison"></div>
+      </div>
+
+      <!-- Metrics Section -->
+      <div class="metrics-section">
+        <div class="metrics-title">详细指标</div>
+        <div id="metricsList"></div>
+      </div>
+
+      <!-- Achievements Section -->
+      <div class="achievements-section" id="achievementsSection" style="display: none;">
+        <div class="achievements-title">成就徽章</div>
+        <div class="achievements-list" id="achievementsList"></div>
+      </div>
+
+      <!-- Advice Section -->
+      <div class="advice-section">
+        <div class="advice-title">改进建议</div>
+        <ul class="advice-list" id="adviceList"></ul>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <div class="footer-text">扫码体验声乐评测小程序</div>
+        <div class="qrcode-section">
+          <div class="qrcode-placeholder">小程序码</div>
+        </div>
+        <div class="share-buttons">
+          <button class="share-btn" onclick="copyLink()">复制链接</button>
+          <button class="share-btn" onclick="shareToWechat()">分享到微信</button>
+        </div>
+      </div>
+    </div>
+    <div class="error" id="error" style="display: none;">加载失败，请检查链接是否正确</div>
+  </div>
+
+  <script>
+    // 获取URL参数
+    function getUrlParams() {
+      const params = new URLSearchParams(window.location.search);
+      const data = params.get('data');
+      if (data) {
+        try {
+          return JSON.parse(decodeURIComponent(data));
+        } catch (e) {
+          console.error('解析数据失败:', e);
+          return null;
+        }
+      }
+      return null;
+    }
+
+    // 获取分数等级
+    function getScoreLevel(score) {
+      if (score >= 90) return '优秀';
+      if (score >= 80) return '良好';
+      if (score >= 70) return '中等';
+      if (score >= 60) return '及格';
+      return '初级';
+    }
+
+    // 获取个性化文案
+    function getPersonalizedMessage(score) {
+      if (score < 70) {
+        const messages = [
+          '每一次发声都是进步的开始 ✨',
+          '你的声音有无限可能，继续加油 💪',
+          '坚持练习，声音会越来越美 🌱'
+        ];
+        return messages[Math.floor(Math.random() * messages.length)];
+      } else if (score >= 70 && score < 85) {
+        const messages = [
+          '你的声音温柔而有力量 💫',
+          '表现不错，继续努力会更好',
+          '你的声音很有潜力，加油！'
+        ];
+        return messages[Math.floor(Math.random() * messages.length)];
+      } else {
+        const messages = [
+          '你的声音如天籁之音 🎵',
+          '完美的表现，你就是声音之星！',
+          '你的声音征服了所有人 ✨'
+        ];
+        return messages[Math.floor(Math.random() * messages.length)];
+      }
+    }
+
+    // 计算超过的用户百分比
+    function calculateComparison(score) {
+      let percent = 0;
+      if (score >= 90) {
+        percent = 95 + Math.random() * 5;
+      } else if (score >= 85) {
+        percent = 85 + Math.random() * 10;
+      } else if (score >= 80) {
+        percent = 70 + Math.random() * 15;
+      } else if (score >= 75) {
+        percent = 55 + Math.random() * 15;
+      } else if (score >= 70) {
+        percent = 40 + Math.random() * 15;
+      } else if (score >= 65) {
+        percent = 25 + Math.random() * 15;
+      } else {
+        percent = 10 + Math.random() * 15;
+      }
+      return Math.round(percent);
+    }
+
+    // 生成成就徽章
+    function generateAchievements(data) {
+      const achievements = [];
+      const score = data.score || 0;
+      const pitch = data.pitch || 0;
+      const rhythm = data.rhythm || 0;
+      const volume = data.volume || 0;
+      const timbre = data.timbre || 0;
+
+      if (rhythm >= 85) {
+        achievements.push({ icon: '🎼', name: '节奏达人' });
+      }
+      if (score >= 90) {
+        achievements.push({ icon: '✨', name: '声音之光' });
+      }
+      if (pitch >= 88) {
+        achievements.push({ icon: '🎵', name: '音准大师' });
+      }
+      if (score >= 60 && achievements.length === 0) {
+        achievements.push({ icon: '🌟', name: '勇敢尝试' });
+      }
+
+      return achievements.slice(0, 2);
+    }
+
+    // 获取改进建议
+    function getAdvice(data) {
+      const advice = [];
+      const pitch = data.pitch || 0;
+      const rhythm = data.rhythm || 0;
+      const volume = data.volume || 0;
+      const timbre = data.timbre || 0;
+
+      if (pitch < 80) {
+        advice.push('多练习音阶，提高音准准确性');
+      }
+      if (rhythm < 80) {
+        advice.push('多听节拍器练习，增强节奏感');
+      }
+      if (volume < 80) {
+        advice.push('加强气息训练，改善音量控制');
+      }
+      if (timbre < 80) {
+        advice.push('练习共鸣技巧，让音色更加圆润');
+      }
+      if (advice.length === 0) {
+        advice.push('继续保持，你的声音表现很棒！');
+      }
+
+      return advice;
+    }
+
+    // 渲染页面
+    function renderPage(data) {
+      const score = data.score || 0;
+      const level = getScoreLevel(score);
+      const message = getPersonalizedMessage(score);
+      const comparison = calculateComparison(score);
+      const achievements = generateAchievements(data);
+      const advice = getAdvice(data);
+
+      // 设置日期
+      const date = new Date();
+      document.getElementById('date').textContent = 
+        `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+
+      // 设置分数
+      animateScore(score);
+      document.getElementById('levelBadge').textContent = level;
+      document.getElementById('message').textContent = message;
+      document.getElementById('comparison').textContent = `超过 ${comparison}% 的用户`;
+
+      // 渲染指标
+      const metricsList = document.getElementById('metricsList');
+      const metrics = [
+        { name: '音准', score: data.pitch || 0, icon: '🎵' },
+        { name: '节奏', score: data.rhythm || 0, icon: '🎼' },
+        { name: '音量', score: data.volume || 0, icon: '🔊' },
+        { name: '音色', score: data.timbre || 0, icon: '🎤' }
+      ];
+
+      metricsList.innerHTML = metrics.map(metric => `
+        <div class="metric-item">
+          <div class="metric-header">
+            <div class="metric-name">
+              <span>${metric.icon}</span>
+              <span>${metric.name}</span>
+            </div>
+            <div class="metric-score">${metric.score}分</div>
+          </div>
+          <div class="metric-bar">
+            <div class="metric-fill" style="width: ${metric.score}%"></div>
+          </div>
+        </div>
+      `).join('');
+
+      // 渲染成就
+      if (achievements.length > 0) {
+        document.getElementById('achievementsSection').style.display = 'block';
+        document.getElementById('achievementsList').innerHTML = achievements.map(achievement => `
+          <div class="achievement-item">
+            <div class="achievement-icon">${achievement.icon}</div>
+            <div class="achievement-name">${achievement.name}</div>
+          </div>
+        `).join('');
+      }
+
+      // 渲染建议
+      document.getElementById('adviceList').innerHTML = advice.map(item => `
+        <li class="advice-item">${item}</li>
+      `).join('');
+
+      // 显示内容
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('content').style.display = 'block';
+    }
+
+    // 分数动画
+    function animateScore(finalScore) {
+      let currentScore = 0;
+      const increment = finalScore / 60;
+      const timer = setInterval(() => {
+        currentScore += increment;
+        if (currentScore >= finalScore) {
+          currentScore = finalScore;
+          clearInterval(timer);
+        }
+        document.getElementById('scoreNumber').textContent = Math.round(currentScore);
+        
+        // 更新进度环（使用SVG stroke-dashoffset）
+        const progress = currentScore / 100;
+        const circumference = 2 * Math.PI * 82; // 半径82px
+        const offset = circumference * (1 - progress);
+        const progressCircle = document.getElementById('scoreProgressCircle');
+        if (progressCircle) {
+          progressCircle.style.strokeDashoffset = offset;
+        }
+      }, 20);
+    }
+
+    // 复制链接
+    function copyLink() {
+      const url = window.location.href;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(() => {
+          alert('链接已复制到剪贴板');
+        });
+      } else {
+        // 降级方案
+        const textarea = document.createElement('textarea');
+        textarea.value = url;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        alert('链接已复制到剪贴板');
+      }
+    }
+
+    // 分享到微信
+    function shareToWechat() {
+      const url = window.location.href;
+      copyLink();
+      alert('链接已复制，请粘贴到微信中分享给好友');
+    }
+
+    // 初始化
+    window.onload = function() {
+      const data = getUrlParams();
+      if (data) {
+        renderPage(data);
+      } else {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('error').style.display = 'block';
+      }
+    };
+  </script>
+</body>
+</html>
+

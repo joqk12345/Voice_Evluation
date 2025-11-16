@@ -1,11 +1,24 @@
-<!--pages/result/result.wxml - 专业简洁风格，参考 tobiplayer renderer-->
+<!--pages/result/result.wxml - 沉浸式舞台风格，增强社交传播力-->
 <view class="result-container">
-  <!-- 简洁标题栏 -->
-  <view class="page-header">
-    <view class="header-content">
-      <text class="page-title">音频分析结果</text>
-      <text class="page-date">{{currentDate}}</text>
+  <!-- 舞台灯光背景 -->
+  <view class="stage-background">
+    <view class="light-beam light-1"></view>
+    <view class="light-beam light-2"></view>
+    <view class="light-beam light-3"></view>
+    <!-- 音乐元素动画 -->
+    <view class="music-elements">
+      <text class="music-note note-1">♪</text>
+      <text class="music-note note-2">♫</text>
+      <text class="music-note note-3">♬</text>
+      <text class="music-note note-4">♪</text>
     </view>
+  </view>
+
+  <!-- 顶部标题区：今日声音报告 -->
+  <view class="title-section">
+    <text class="main-title">今日声音报告</text>
+    <text class="title-emoji">🎶</text>
+    <text class="sub-title">{{currentDate}}</text>
   </view>
 
   <!-- 非人声提示（仅当人声检测启用且检测到非人声时显示） -->
@@ -57,41 +70,77 @@
     </view>
     </view>
     
-  <!-- 总分展示（简洁卡片） -->
-  <view class="score-section">
-    <view class="score-card">
-      <view class="score-main">
-        <text class="score-number">{{resultData.score}}</text>
-        <text class="score-unit">分</text>
+  <!-- 主分数区：大圆环分数（动画光效） -->
+  <view class="score-ring-section">
+    <view class="score-ring-wrapper">
+      <!-- 外圈光晕 -->
+      <view class="ring-glow"></view>
+      <!-- 分数圆环 -->
+      <view class="score-ring-container">
+        <canvas 
+          canvas-id="scoreRingCanvas" 
+          id="scoreRingCanvas"
+          class="score-ring-canvas"
+        ></canvas>
+        <view class="score-ring-content">
+          <view id="scoreGroup" class="score-group">
+            <text id="scoreText" class="ring-score-number">{{animatedScore}}</text>
+            <text class="ring-score-unit">分</text>
+          </view>
+          <text class="ring-level-badge">{{scoreLevel.level}}</text>
+        </view>
       </view>
-      <view class="score-info">
-        <text class="level-badge">{{scoreLevel.level}}</text>
-        <text class="level-desc">{{getLevelDescription(resultData.score)}}</text>
+    </view>
+    
+    <!-- 个性化文案 -->
+    <view class="personalized-message">
+      <text class="message-text">{{personalizedMessage}}</text>
+    </view>
+    
+    <!-- 数据对比 -->
+    <view class="comparison-stats" wx:if="{{comparisonPercent > 0}}">
+      <text class="stats-text">超过 {{comparisonPercent}}% 的用户</text>
+    </view>
+  </view>
+
+  <!-- 四项评分区：声波形进度条 -->
+  <view class="metrics-section">
+    <view class="section-title">详细分析</view>
+    <view class="metrics-grid">
+      <view class="metric-card {{item.isHighScore ? 'metric-card-high' : 'metric-card-low'}}" wx:for="{{metricsList}}" wx:key="index">
+        <view class="metric-header">
+          <text class="metric-icon">{{item.icon}}</text>
+          <text class="metric-name">{{item.name}}</text>
+          <view class="metric-score-inline">
+            <text class="score-value {{item.isHighScore ? 'score-value-high' : 'score-value-low'}}">{{item.score}}</text>
+            <text class="score-unit">分</text>
+          </view>
+        </view>
+        <!-- 声波形进度条 -->
+        <view class="waveform-progress-container">
+          <view class="waveform-progress-bar" data-score="{{item.score}}" data-index="{{index}}">
+            <view class="waveform-fill {{item.isHighScore ? 'waveform-fill-high' : 'waveform-fill-low'}}" style="width: {{item.score}}%;">
+              <canvas 
+                canvas-id="waveformBar{{index}}" 
+                class="waveform-bar-canvas"
+              ></canvas>
+            </view>
+          </view>
+        </view>
+        <view class="metric-advice {{item.isHighScore ? 'metric-advice-high' : 'metric-advice-low'}}">
+          <text class="advice-text">{{item.advice}}</text>
+        </view>
       </view>
     </view>
   </view>
 
-  <!-- 详细指标 -->
-  <view class="metrics-section">
-    <view class="section-title">详细分析</view>
-    <view class="metrics-grid">
-      <view class="metric-card" wx:for="{{metricsList}}" wx:key="index">
-        <view class="metric-header">
-          <text class="metric-icon">{{item.icon}}</text>
-            <text class="metric-name">{{item.name}}</text>
-          </view>
-          <view class="metric-score">
-            <text class="score-value">{{item.score}}</text>
-            <text class="score-unit">分</text>
-          </view>
-        <view class="metric-progress">
-          <view class="progress-bar">
-            <view class="progress-fill" style="width: {{item.score}}%;"></view>
-          </view>
-        </view>
-        <view class="metric-advice">
-          <text class="advice-text">{{item.advice}}</text>
-        </view>
+  <!-- 成就徽章区 -->
+  <view class="achievements-section" wx:if="{{achievements.length > 0}}">
+    <view class="section-title">成就徽章</view>
+    <view class="achievements-grid">
+      <view class="achievement-badge" wx:for="{{achievements}}" wx:key="index">
+        <view class="badge-icon">{{item.icon}}</view>
+        <text class="badge-name">{{item.name}}</text>
       </view>
     </view>
   </view>
@@ -107,26 +156,42 @@
     </view>
   </view>
 
-  <!-- 操作按钮 -->
-  <view class="action-section">
-    <button 
-      class="action-btn secondary" 
-      bindtap="playRecord" 
-      wx:if="{{recordFilePath}}"
-    >
-      <text class="btn-icon">{{isPlaying ? '⏸️' : '▶️'}}</text>
-      <text class="btn-text">{{isPlaying ? '暂停播放' : '播放录音'}}</text>
+  <!-- 练习一下按钮（突出显示） -->
+  <view class="recommend-section">
+    <button class="recommend-btn-primary" bindtap="viewRecommend">
+      <text class="btn-icon">💪</text>
+      <text class="btn-text">练习一下</text>
+      <text class="btn-arrow">→</text>
     </button>
-    
-    <button class="action-btn primary" bindtap="viewRecommend">
-      <text class="btn-icon">🎵</text>
-      <text class="btn-text">查看推荐</text>
-    </button>
-    
-    <button class="action-btn share-btn" bindtap="generateShareImage">
-      <text class="btn-icon">📤</text>
-      <text class="btn-text">生成分享图片</text>
-    </button>
+  </view>
+
+  <!-- 分享引导区：二维码 + 一键分享按钮（优化布局，更紧凑） -->
+  <view class="share-section">
+    <view class="share-content-compact">
+      <view class="share-qrcode-wrapper">
+        <image class="share-qrcode" src="/images/qrcode.png" mode="aspectFit"></image>
+        <text class="qrcode-tip">扫码体验</text>
+      </view>
+      
+      <view class="share-buttons-compact">
+        <button 
+          class="share-btn-primary" 
+          bindtap="generateShareImage"
+        >
+          <text class="btn-icon">✨</text>
+          <text class="btn-text">生成分享海报</text>
+        </button>
+        
+        <button 
+          class="share-btn-secondary" 
+          bindtap="playRecord" 
+          wx:if="{{recordFilePath}}"
+        >
+          <text class="btn-icon">{{isPlaying ? '⏸️' : '▶️'}}</text>
+          <text class="btn-text">{{isPlaying ? '暂停' : '播放'}}</text>
+        </button>
+      </view>
+    </view>
   </view>
 
   <!-- 隐藏的Canvas用于生成图片 -->

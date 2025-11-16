@@ -31,6 +31,8 @@
 
 ### 📱 社交分享
 - **结果分享**: 分享评测结果到微信朋友圈
+- **H5页面分享**: 支持生成H5页面链接，可在微信、朋友圈、其他平台分享
+- **分享图片生成**: 自动生成精美的分享图片，包含评测结果和二维码
 - **成就分享**: 分享成就徽章和进步记录
 - **邀请好友**: 邀请朋友一起使用评测功能
 
@@ -63,7 +65,8 @@ Voice_Evluation-V1/
 ├── app.wxss              # 全局样式文件
 ├── sitemap.json          # 站点地图配置
 ├── utils/                # 工具函数
-│   └── util.js          # 通用工具函数
+│   ├── util.js          # 通用工具函数
+│   └── audioAnalyzer.js  # 音频分析工具
 ├── pages/                # 页面文件
 │   ├── index/           # 首页
 │   ├── login/           # 登录页
@@ -71,8 +74,22 @@ Voice_Evluation-V1/
 │   ├── result/          # 评测结果页
 │   ├── history/         # 历史记录页
 │   ├── recommend/       # 个性化推荐页
-│   └── profile/         # 个人中心页
-└── images/              # 图片资源
+│   ├── profile/         # 个人中心页
+│   ├── share/           # 分享页
+│   ├── settings/        # 设置页
+│   ├── challenge/       # 挑战页
+│   ├── achievements/    # 成就页
+│   └── payment/         # 支付页
+├── h5/                   # H5页面
+│   └── result.html      # 评测结果H5页面
+├── images/               # 图片资源
+│   ├── qrcode.png       # 小程序二维码
+│   └── README.md        # 图片资源说明
+├── custom-tab-bar/       # 自定义底部导航栏
+├── GIT_BRANCH_MERGE.md   # Git分支合并操作文档
+├── H5_SHARE_SETUP.md     # H5页面分享功能配置说明
+├── PRODUCT_FEEDBACK_IMPROVEMENT_PLAN.md  # 产品体验反馈修改计划
+└── images/QRCODE_SETUP.md # 二维码图片设置说明
 ```
 
 ## 页面功能
@@ -152,6 +169,13 @@ Voice_Evluation-V1/
 2. 更新 `utils/util.js` 中的API接口地址
 3. 配置音频分析服务接口
 4. 设置用户数据存储
+5. **H5分享配置**（可选）：
+   - 部署 `h5/result.html` 到服务器
+   - 在 `app.js` 中配置 `h5BaseUrl`
+   - 详细配置请参考 [H5_SHARE_SETUP.md](./H5_SHARE_SETUP.md)
+6. **二维码配置**（可选）：
+   - 将二维码图片放置到 `images/qrcode.png`
+   - 详细说明请参考 [images/QRCODE_SETUP.md](./images/QRCODE_SETUP.md)
 
 ## 功能演示
 
@@ -198,6 +222,17 @@ Voice_Evluation-V1/
 - [ ] 离线功能支持
 - [ ] AI智能推荐
 - [ ] 语音识别集成
+
+## 相关文档
+
+### 功能配置文档
+- [H5页面分享功能配置说明](./H5_SHARE_SETUP.md) - H5页面分享功能的详细配置指南
+- [二维码图片设置说明](./images/QRCODE_SETUP.md) - 二维码图片的配置和使用说明
+- [图片资源说明](./images/README.md) - 图片资源的规格和使用说明
+
+### 开发文档
+- [Git分支合并操作文档](./GIT_BRANCH_MERGE.md) - Git分支合并的详细操作指南
+- [产品体验反馈修改计划](./PRODUCT_FEEDBACK_IMPROVEMENT_PLAN.md) - 基于用户反馈的产品改进计划
 
 ## 贡献指南
 

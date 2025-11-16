@@ -17,6 +17,52 @@
     </view>
   </view>
 
+  <!-- 个性化练习计划（优先显示） -->
+  <view class="practice-section">
+    <view class="section-header">
+      <text class="section-title">💪 个性化练习计划</text>
+      <text class="section-subtitle">根据您的评测结果定制</text>
+    </view>
+    
+    <!-- 需要重点练习的板块提示 -->
+    <view class="weak-areas-tip" wx:if="{{weakAreas && weakAreas.length > 0}}">
+      <text class="tip-icon">🎯</text>
+      <view class="tip-content">
+        <text class="tip-title">建议重点练习以下板块：</text>
+        <view class="weak-areas-tags">
+          <text class="weak-area-tag" wx:for="{{weakAreas}}" wx:key="index">
+            <text class="tag-icon">{{item.icon}}</text>
+            <text class="tag-name">{{item.name}}</text>
+            <text class="tag-score">{{item.score}}分</text>
+          </text>
+        </view>
+      </view>
+    </view>
+    
+    <view class="practice-list">
+      <view class="practice-item {{item.priority ? 'practice-item-priority' : ''}}" wx:for="{{practicePlans}}" wx:key="index">
+        <view class="practice-icon-wrapper {{item.priority ? 'practice-icon-priority' : ''}}">
+          <text class="practice-icon">{{item.icon}}</text>
+          <text class="priority-badge" wx:if="{{item.priority}}">重点</text>
+        </view>
+        <view class="practice-content">
+          <view class="practice-header">
+            <text class="practice-name">{{item.type}}</text>
+            <text class="priority-label" wx:if="{{item.priority && item.weakArea}}">针对{{item.weakArea.name}}提升</text>
+          </view>
+          <text class="practice-desc">{{item.description}}</text>
+          <view class="practice-meta">
+            <text class="practice-duration">{{item.duration}}</text>
+            <text class="practice-frequency">{{item.frequency}}</text>
+          </view>
+        </view>
+        <button class="practice-btn {{item.priority ? 'practice-btn-priority' : ''}}" bindtap="startPractice" data-type="{{item.type}}">
+          <text>开始</text>
+        </button>
+      </view>
+    </view>
+  </view>
+
   <!-- 推荐歌曲 -->
   <view class="songs-section">
     <view class="section-header">
@@ -42,33 +88,6 @@
         <view class="song-arrow">
           <text class="arrow-icon">→</text>
         </view>
-      </view>
-    </view>
-  </view>
-
-  <!-- 练习计划 -->
-  <view class="practice-section">
-    <view class="section-header">
-      <text class="section-title">💪 个性化练习计划</text>
-      <text class="section-subtitle">根据您的评测结果定制</text>
-    </view>
-    
-    <view class="practice-list">
-      <view class="practice-item" wx:for="{{practicePlans}}" wx:key="index">
-        <view class="practice-icon-wrapper">
-          <text class="practice-icon">{{item.icon}}</text>
-        </view>
-        <view class="practice-content">
-          <text class="practice-name">{{item.type}}</text>
-          <text class="practice-desc">{{item.description}}</text>
-          <view class="practice-meta">
-            <text class="practice-duration">{{item.duration}}</text>
-            <text class="practice-frequency">{{item.frequency}}</text>
-          </view>
-        </view>
-        <button class="practice-btn" bindtap="startPractice" data-type="{{item.type}}">
-          <text>开始</text>
-        </button>
       </view>
     </view>
   </view>

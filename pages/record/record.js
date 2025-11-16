@@ -9,8 +9,8 @@ Page({
     recordCompleted: false,
     isAnalyzing: false,
     recordTime: 0,
-    countdown: 60, // 倒计时（秒）
-    selectedDurationIndex: 1, // 默认选择1分钟
+    countdown: 30, // 倒计时（秒）
+    selectedDurationIndex: 0, // 默认选择30秒（根据反馈优化）
     durationOptions: [
       { label: '30秒', value: 30 },
       { label: '1分钟', value: 60 },
@@ -19,7 +19,7 @@ Page({
     enableVoiceDetection: false, // 人声检测开关，默认关闭（因为灵敏度太高）
     enableMelodyDetection: false, // 旋律检测开关，默认关闭
     enableWaveform: false, // 波形可视化开关，默认关闭
-    showAdvancedSettings: false, // 是否显示高级设置
+    showAdvancedSettings: true, // 是否显示高级设置（默认展开，根据反馈优化）
     recordTimer: null,
     waveformTimer: null, // 波形更新定时器（已废弃，保留兼容）
     recorderManager: null,
@@ -32,7 +32,8 @@ Page({
     lastDrawTime: 0, // 上次绘制时间（已废弃，保留兼容）
     currentPitch: 0, // 当前音高值（用于显示）
     currentPitchText: '0', // 当前音高文本（用于显示）
-    waveformTime: 0 // 波形时间（已废弃，保留兼容）
+    waveformTime: 0, // 波形时间（已废弃，保留兼容）
+    audioBallScale: 1.0 // 波动球的缩放比例（根据音频数据动态更新）
   },
   
   // Canvas 2D Node 相关
@@ -312,6 +313,7 @@ Page({
       const sampleRate = 16000
       const samplesPerFrame = 1024 // 每帧样本数
       const newSamples = []
+      let maxAmplitude = 0
       
       for (let i = 0; i < samplesPerFrame; i++) {
         // 使用多个频率的正弦波叠加，模拟真实声音
@@ -324,13 +326,21 @@ Page({
         
         // 添加一些随机噪声，使其更真实
         const noise = (Math.random() - 0.5) * 0.1
-        newSamples.push(combined + noise)
+        const sample = combined + noise
+        newSamples.push(sample)
+        maxAmplitude = Math.max(maxAmplitude, Math.abs(sample))
       }
       
       // 推入 ring 缓冲
       for (let i = 0; i < newSamples.length; i++) {
         this.ring.push(newSamples[i])
       }
+      
+      // 更新波动球的缩放比例（根据模拟音频幅度）
+      const ballScale = 1.0 + maxAmplitude * 0.3
+      this.setData({
+        audioBallScale: ballScale
+      })
       
       // 控制 ring 缓冲长度（最多保留约4屏数据）
       const maxSamples = this.canvas 
@@ -347,7 +357,7 @@ Page({
     
     // 启动动画
     generateMockWaveform()
-    console.log('🎬 录音中动画已启动（模拟波形）')
+    console.log('🎬 录音中动画已启动（模拟波形和波动球）')
   },
 
   _stopRecordingAnimation() {
@@ -372,9 +382,13 @@ Page({
         pitchData: [],
         currentPitch: 0,
         currentPitchText: '0',
-        waveformTime: 0
+        waveformTime: 0,
+        audioBallScale: 1.0 // 重置波动球缩放
       })
       this.startTimer()
+      
+      // 启动录音中的波动球动画（无论是否启用波形可视化）
+      this._startRecordingAnimation()
       
       // 如果启用了波形可视化，初始化 Canvas 2D 并启动渲染循环
       if (this.data.enableWaveform) {
@@ -398,8 +412,7 @@ Page({
           }
         }, 300) // 增加延迟，确保 Canvas 已显示
         
-        // 启动录音中的实时波形更新（使用模拟动画，因为 onFrameRecorded 可能不工作）
-        this._startRecordingAnimation()
+        // Canvas 初始化已在上面完成，这里不需要再次启动动画
       }
     })
 
@@ -452,10 +465,20 @@ Page({
         
         // 推入环形缓冲（归一化）
         const samplesBefore = this.ring.length
+        let maxAmplitude = 0
         for (let i = 0; i < int16Array.length; i++) {
-          this.ring.push(int16Array[i] / 32768.0)
+          const normalized = int16Array[i] / 32768.0
+          this.ring.push(normalized)
+          maxAmplitude = Math.max(maxAmplitude, Math.abs(normalized))
         }
         const samplesAfter = this.ring.length
+        
+        // 更新波动球的缩放比例（根据音频幅度）
+        // 幅度范围：0-1，缩放范围：1.0-1.3
+        const ballScale = 1.0 + maxAmplitude * 0.3
+        this.setData({
+          audioBallScale: ballScale
+        })
         
         // 每 10 帧打印一次日志（避免日志过多）
         if (!this._frameCount) this._frameCount = 0

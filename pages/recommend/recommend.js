@@ -10,15 +10,37 @@ Page({
     recommendedSongs: [],
     vocalTips: [],
     dailyChallenge: {},
-    challengeProgress: 30
+    challengeProgress: 30,
+    practiceData: null, // 从结果页面传递的评测数据
+    hasPracticeData: false // 是否有传递的评测数据
   },
 
-  onLoad() {
+  onLoad(options) {
+    // 接收从结果页面传递的评测数据
+    if (options.data) {
+      try {
+        const practiceData = JSON.parse(decodeURIComponent(options.data))
+        this.setData({
+          practiceData: practiceData,
+          hasPracticeData: true
+        })
+      } catch (error) {
+        console.error('解析练习数据失败:', error)
+        this.setData({
+          hasPracticeData: false
+        })
+      }
+    } else {
+      this.setData({
+        hasPracticeData: false
+      })
+    }
+    
     this.loadRecommendData()
   },
 
   onShow() {
-    // 每次显示页面时刷新数据
+    // 每次显示页面时刷新数据（但保留传递的练习数据）
     this.loadRecommendData()
   },
 
@@ -62,32 +84,93 @@ Page({
     })
   },
 
-  // 加载练习计划
+  // 加载练习计划（优先显示针对低分板块的练习）
   loadPracticePlans() {
-    const history = app.globalData.mockHistory || []
     let metrics = { pitch: 70, rhythm: 70, volume: 70, timbre: 70 }
+    let weakAreas = []
     
-    if (history.length > 0) {
-      const latest = history[0]
-      metrics = {
-        pitch: latest.pitch,
-        rhythm: latest.rhythm,
-        volume: latest.volume,
-        timbre: latest.timbre
+    // 优先使用从结果页面传递的数据
+    if (this.data.hasPracticeData && this.data.practiceData) {
+      const practiceData = this.data.practiceData
+      metrics = practiceData.metrics || metrics
+      weakAreas = practiceData.weakAreas || []
+    } else {
+      // 如果没有传递数据，从历史记录获取
+      const history = app.globalData.mockHistory || []
+      if (history.length > 0) {
+        const latest = history[0]
+        metrics = {
+          pitch: latest.pitch,
+          rhythm: latest.rhythm,
+          volume: latest.volume,
+          timbre: latest.timbre
+        }
+        
+        // 找出低分板块
+        const metricsList = [
+          { name: '音准', score: latest.pitch, icon: '🎵' },
+          { name: '节奏', score: latest.rhythm, icon: '🎼' },
+          { name: '音量', score: latest.volume, icon: '🔊' },
+          { name: '音色', score: latest.timbre, icon: '🎤' }
+        ]
+        weakAreas = metricsList
+          .filter(item => item.score < 70)
+          .sort((a, b) => a.score - b.score)
       }
     }
     
     const plans = getPracticePlan(metrics)
-    const practicePlans = plans.map((plan, index) => {
+    
+    // 如果有需要重点练习的板块，优先显示这些板块的练习
+    let practicePlans = plans.map((plan, index) => {
       const icons = ['🎵', '🎼', '🔊', '🎤', '💪']
       return {
         ...plan,
-        icon: icons[index] || '🎵'
+        icon: icons[index] || '🎵',
+        priority: false
       }
     })
     
+    // 如果有低分板块，将相关练习提到前面
+    if (weakAreas.length > 0) {
+      const areaNameMap = {
+        '音准': '音准',
+        '节奏': '节奏',
+        '音量': '气息',
+        '音色': '共鸣'
+      }
+      
+      // 找出需要优先显示的练习
+      const priorityPlans = []
+      const normalPlans = []
+      
+      practicePlans.forEach(plan => {
+        const isPriority = weakAreas.some(area => {
+          const areaName = areaNameMap[area.name] || area.name
+          return plan.type.includes(areaName) || plan.description.includes(areaName)
+        })
+        
+        if (isPriority) {
+          priorityPlans.push({
+            ...plan,
+            priority: true,
+            weakArea: weakAreas.find(area => {
+              const areaName = areaNameMap[area.name] || area.name
+              return plan.type.includes(areaName) || plan.description.includes(areaName)
+            })
+          })
+        } else {
+          normalPlans.push(plan)
+        }
+      })
+      
+      // 将优先练习放在前面
+      practicePlans = [...priorityPlans, ...normalPlans]
+    }
+    
     this.setData({
-      practicePlans: practicePlans
+      practicePlans: practicePlans,
+      weakAreas: weakAreas // 保存低分板块信息，供页面显示使用
     })
   },
 
@@ -282,10 +365,10 @@ Page({
             data: wechatId,
             success: () => {
               wx.showModal({
-                title: '预约试听',
-                content: `微信号已复制到剪贴板：${wechatId}\n\n请添加客服微信，我们将为您安排试听时间。\n\n试听课程完全免费，让您体验专业声乐指导的魅力！`,
+                title: '微信号已复制',
+                content: `客服微信号：${wechatId}\n\n✅ 微信号已复制到剪贴板\n\n📱 添加步骤：\n1. 返回微信主界面\n2. 点击右上角"+"号\n3. 选择"添加朋友"\n4. 点击"微信号/手机号"\n5. 粘贴并搜索\n6. 添加好友并发送"预约试听"\n\n🎁 试听课程完全免费！`,
                 confirmText: '知道了',
-                cancelText: '复制微信号',
+                cancelText: '再次复制',
                 success: (modalRes) => {
                   if (modalRes.cancel) {
                     // 再次复制
@@ -294,7 +377,15 @@ Page({
                       success: () => {
                         wx.showToast({
                           title: '微信号已复制',
-                          icon: 'success'
+                          icon: 'success',
+                          duration: 2000
+                        })
+                      },
+                      fail: () => {
+                        wx.showToast({
+                          title: '复制失败，请手动输入',
+                          icon: 'none',
+                          duration: 2000
                         })
                       }
                     })
@@ -303,11 +394,34 @@ Page({
               })
             },
             fail: () => {
+              // 如果复制失败，显示微信号让用户手动复制
               wx.showModal({
                 title: '预约试听',
-                content: `客服微信号：${wechatId}\n\n请添加客服微信，我们将为您安排试听时间。\n\n试听课程完全免费，让您体验专业声乐指导的魅力！`,
-                showCancel: false,
-                confirmText: '我知道了'
+                content: `客服微信号：${wechatId}\n\n请长按复制微信号，然后：\n1. 返回微信主界面\n2. 点击右上角"+"号\n3. 选择"添加朋友"\n4. 点击"微信号/手机号"\n5. 粘贴并搜索\n6. 添加好友并发送"预约试听"\n\n🎁 试听课程完全免费！`,
+                confirmText: '知道了',
+                cancelText: '复制微信号',
+                success: (modalRes) => {
+                  if (modalRes.cancel) {
+                    // 尝试再次复制
+                    wx.setClipboardData({
+                      data: wechatId,
+                      success: () => {
+                        wx.showToast({
+                          title: '微信号已复制',
+                          icon: 'success',
+                          duration: 2000
+                        })
+                      },
+                      fail: () => {
+                        wx.showToast({
+                          title: '复制失败，请手动输入',
+                          icon: 'none',
+                          duration: 2000
+                        })
+                      }
+                    })
+                  }
+                }
               })
             }
           })
